@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funcionários - CRM Casa de Repouso</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <h1>Gestão de Funcionários</h1>
+        </div>
+    </header>
+
+    <nav class="admin-nav">
+        <ul>
+            <li><a href="/admin">Dashboard</a></li>
+            <li><a href="/admin/leads">Leads (Interessados)</a></li>
+            <li><a href="/admin/residentes">Residentes</a></li>
+            <li><a href="/admin/funcionarios">Funcionários</a></li>
+            <li><a href="/admin/financeiro">Financeiro</a></li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        <h2>Equipe Profissional</h2>
+
+        <p><i>Nota: Base de dados retornando `funcionarios`. No protótipo atual, esta rota precisa ser implementada no
+                app.py para listagem, ou se não houver rota com a var, será exibida a mensagem abaixo.</i></p>
+
+        {% if funcionarios %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Cargo</th>
+                    <th>Salário Base</th>
+                    <th>Data Admissão</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for func in funcionarios %}
+                <tr>
+                    <td>{{ func.nome }}</td>
+                    <td>{{ func.cargo }}</td>
+                    <td>R$ {{ "%.2f"|format(func.salario_base) }}</td>
+                    <td>{{ func.data_admissao.strftime('%d/%m/%Y') if func.data_admissao else 'N/A' }}</td>
+                    <td>{{ func.status }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>Nenhum funcionário encontrado.</p>
+        {% endif %}
+    </main>
+</body>
+
+</html>

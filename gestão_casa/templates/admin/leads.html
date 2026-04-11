@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Leads - CRM</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <h1>Leads (Interessados)</h1>
+        </div>
+    </header>
+
+    <nav class="admin-nav">
+        <ul>
+            <li><a href="/admin">Dashboard</a></li>
+            <li><a href="/admin/leads">Leads (Interessados)</a></li>
+            <li><a href="/admin/residentes">Residentes</a></li>
+            <li><a href="/admin/funcionarios">Funcionários</a></li>
+            <li><a href="/admin/financeiro">Financeiro</a></li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        <h2>Lista de Potenciais Clientes</h2>
+
+        {% if leads %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Responsável</th>
+                    <th>Idoso</th>
+                    <th>Telefone</th>
+                    <th>Grau</th>
+                    <th>Valor Estimado</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for lead in leads %}
+                <tr>
+                    <td>{{ lead.data_criacao.strftime('%d/%m/%Y %H:%M') if lead.data_criacao else 'N/A' }}</td>
+                    <td>{{ lead.nome_responsavel }}</td>
+                    <td>{{ lead.nome_idoso }}</td>
+                    <td>{{ lead.telefone }}</td>
+                    <td>Grau {{ lead.grau_patologia }}</td>
+                    <td>R$ {{ "%.2f"|format(lead.valor_estimado) }}</td>
+                    <td><span
+                            style="background: #f1c40f; padding: 2px 8px; border-radius: 4px; font-weight: bold; font-size: 0.8rem;">{{
+                            lead.status }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>Nenhum lead encontrado no momento.</p>
+        {% endif %}
+    </main>
+</body>
+
+</html>

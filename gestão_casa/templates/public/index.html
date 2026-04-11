@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casa de Repouso - Cuidado e Conforto</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <header class="top-header">
+        <div class="container header-container">
+
+            <img src="../static/img/logo.png" alt="Logo" class="logo">
+
+            <!-- Menu Desktop -->
+            <nav class="desktop-menu">
+                <ul>
+                    <li><a href="#sobre">Quem somos</a></li>
+                    <li><a href="#orcamento">Contato</a></li>
+                </ul>
+            </nav>
+
+            <!-- Menu Mobile -->
+            <div class="menu-icon" onclick="toggleMenu()">
+                <i class="bi bi-list"></i>
+            </div>
+
+            <!-- Navegação Mobile (Dropdown) -->
+            <nav class="mobile-nav" id="mobileMenu">
+                <ul>
+                    <li><a href="#sobre" onclick="toggleMenu()">Quem somos</a></li>
+                    <li><a href="#orcamento" onclick="toggleMenu()">Contato</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-carrossel">
+                <!-- Slide 1 -->
+                <div class="hero-carrossel-item">
+                    <img src="https://images.unsplash.com/photo-1572567981653-ce74f7356946?q=80&w=1171&auto=format&fit=crop"
+                        alt="Cuidado e Carinho">
+                    <div class="carrossel-caption">
+                        <h2>Cuidado e carinho</h2>
+                        <p>Um ambiente familiar, seguro e acolhedor para a melhor idade.</p>
+                        <a href="#orcamento" class="btn btn-primary btn-pill mt-3">Agende uma visita</a>
+                    </div>
+                </div>
+                <!-- Slide 2 -->
+                <div class="hero-carrossel-item">
+                    <img src="https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?q=80&w=1171&auto=format&fit=crop"
+                        alt="Profissionais 24h">
+                    <div class="carrossel-caption">
+                        <h2>Profissionais especializados 24 horas</h2>
+                        <p>Atenção em tempo integral com profissionais de saúde e terapias diárias.</p>
+                        <a href="#sobre" class="btn btn-primary btn-pill mt-3">Conheça o espaço</a>
+                    </div>
+                </div>
+                <!-- Slide 3 -->
+                <div class="hero-carrossel-item">
+                    <img src="https://images.unsplash.com/photo-1573497491208-6b1acb260507?q=80&w=1171&auto=format&fit=crop"
+                        alt="Bem estar">
+                    <div class="carrossel-caption">
+                        <h2>Qualidade de vida e sociabilidade</h2>
+                        <p>Estrutura pensada para o bem-estar físico e emocional do residente.</p>
+                        <a href="#orcamento" class="btn btn-primary btn-pill mt-3">Simular Mensalidade</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="container">
+            <div class="hero-content text-center">
+                <h2 class="hero-title">Cuidado e carinho para quem você ama</h2>
+                <p>Um ambiente familiar, seguro e acolhedor para quem você ama.</p>
+                <a href="#orcamento" class="btn btn-primary btn-pill mt-3">Agende uma visita</a>
+            </div>
+        </div>
+
+        <!-- Divisor Cinza -->
+        <div class="image-separator bg-gray"></div>
+
+        <!-- Sobre Nós -->
+        <div class="about-wrapper">
+            <section id="sobre" class="about container text-center">
+                <h2>Sobre nós</h2>
+                <p>Oferecemos atendimento especializado, carinho e respeito para a melhor idade. Nossa estrutura é
+                    preparada
+                    para atender diferentes graus de dependência com uma equipe multidisciplinar.</p>
+                <div class="about-images">
+                    <div class="img-box bg-gray"></div>
+                    <div class="img-box bg-gray"></div>
+                    <div class="img-box bg-gray"></div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Serviços Título -->
+        <section class="services-header container text-center">
+            <h2>Nossos Serviços</h2>
+            <p>Explicação simples do que é o Grau 1, 2 e 3 (isso ajuda o cliente a já se identificar)</p>
+        </section>
+
+        <!-- Graus -->
+        <section class="graus-list">
+            <div class="grau-item bg-primary text-white">
+                <div class="grau-content">
+                    <h3>Grau 1</h3>
+                    <p>Idosos independentes para atividades diárias (AVD), mas que podem necessitar de uso de
+                        equipamentos de autoajuda ou supervisão.</p>
+                </div>
+            </div>
+            <div class="grau-item bg-color-2 text-primary">
+                <div class="grau-content text-dark">
+                    <h3 class="text-primary">Grau 2</h3>
+                    <p>Idosos que necessitam de auxílio para algumas atividades de vida diária, como banho, higiene ou
+                        locomoção, mas não apresentam alterações cognitivas graves.</p>
+                </div>
+            </div>
+            <div class="grau-item bg-primary text-white">
+                <div class="grau-content">
+                    <h3>Grau 3</h3>
+                    <p>Precisa de assistência total para todas as atividades diárias, com cuidados de enfermagem 24
+                        horas.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Simule um Orçamento -->
+        <section id="orcamento" class="simulator container text-center">
+            <h2>Simule um Orçamento</h2>
+            <p style="margin-bottom: 35px;">Preencha os dados abaixo e receba uma estimativa do valor mensal.</p>
+
+            <div class="simulator-layout">
+                <!-- Informações de Contato -->
+                <div class="contact-info text-left">
+                    <div class="contact-item">
+                        <i class="bi bi-whatsapp"></i>
+                        <span>27 99914-9705</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="bi bi-instagram"></i>
+                        <span>aconchego</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="bi bi-geo-alt-fill"></i>
+                        <span>aconchego</span>
+                    </div>
+                </div>
+
+                <!-- Formulário -->
+                <form action="/solicitar-orcamento" method="POST" class="form-orcamento text-left">
+                    <div class="form-group">
+                        <input type="text" id="nome_responsavel" name="nome_responsavel" placeholder="Nome"
+                            class="input-pill" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="nome_idoso" name="nome_idoso" placeholder="Nome do Idoso"
+                            class="input-pill" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="tel" id="telefone" name="telefone" placeholder="(00) 0000-0000" class="input-pill"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label for="grau" class="label-muted">Grau de dependência</label>
+                        <select id="grau" name="grau" class="input-pill" required>
+                            <option value="">Selecione</option>
+                            <option value="1">Grau 1 - Independente</option>
+                            <option value="2">Grau 2 - Semi-dependente</option>
+                            <option value="3">Grau 3 - Dependente Total</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-pill mt-3 w-100">Entre em contato</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Mapa do Google Real -->
+        <section class="map-section">
+            <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3741.736057360103!2d-40.44496891434284!3d-20.311189401710674!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xb83a2fe40f5be9%3A0x7fdd5aa84df9397b!2sR.%20Maranh%C3%A3o%20-%20Novo%20Brasil%2C%20Cariacica%20-%20ES%2C%2029158-450!5e0!3m2!1spt-BR!2sbr!4v1773431260842!5m2!1spt-BR!2sbr"
+                width="100%" height="450" style="border:0; display: block;" allowfullscreen="" loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </section>
+    </main>
+
+    <footer class="main-footer bg-primary text-white">
+        <div class="container footer-content text-center">
+            <div class="footer-logo">
+                <img src="static/img/logo.png" alt="Logo" class="footer-logo-img">
+            </div>
+            <div class="footer-links">
+                <ul>
+                    <li><a href="#sobre">Quem somos</a></li>
+                    <li><a href="#orcamento">Contato</a></li>
+                    <li><a href="gestão_casa/">Gestão</a></li>
+                </ul>
+            </div>
+
+        </div>
+    </footer>
+    <script>
+        function toggleMenu() {
+            var menu = document.getElementById("mobileMenu");
+            menu.classList.toggle("active");
+        }
+    </script>
+</body>
+
+</html>

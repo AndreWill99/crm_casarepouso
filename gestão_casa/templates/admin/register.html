@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - CRM Casa de Repouso</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <div class="auth-wrapper">
+        <div class="auth-sidebar">
+            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Aconchego Santa Barbara"
+                class="auth-sidebar-logo">
+            <h2>Gestão de Propriedades</h2>
+
+            <ul class="auth-features-numbers">
+                <li><span class="feature-number">1</span> Informações pessoais</li>
+                <li><span class="feature-number">2</span> Cargo e função</li>
+                <li><span class="feature-number">3</span> Segurança da conta</li>
+                <li><span class="feature-number">4</span> Confirmação</li>
+            </ul>
+        </div>
+
+        <div class="auth-main">
+            <div class="auth-form-container">
+                <div class="auth-subtitle">Novo Acesso</div>
+                <h1 class="auth-title">Criar sua conta</h1>
+                <p class="auth-desc">Preencha os campos abaixo para se registrar no sistema.</p>
+
+                <form action="/admin/register" method="POST">
+                    <div class="auth-form-group">
+                        <label class="auth-label">Nome Completo</label>
+                        <div class="auth-input-wrapper">
+                            <input type="text" name="name" class="auth-input" placeholder="ex: João da Silva" required>
+                            <span class="auth-input-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="auth-form-group">
+                            <label class="auth-label">Nome de Usuário</label>
+                            <div class="auth-input-wrapper">
+                                <input type="text" name="username" class="auth-input" placeholder="ex: joao.silva"
+                                    required>
+                                <span class="auth-input-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="4"></circle>
+                                        <path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"></path>
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="auth-form-group">
+                            <label class="auth-label">Cargo</label>
+                            <div class="auth-input-wrapper">
+                                <select name="role" class="auth-input" required>
+                                    <option value="" disabled selected>Selecione...</option>
+                                    <option value="admin">Administrador</option>
+                                    <option value="manager">Gerente</option>
+                                    <option value="staff">Funcionário</option>
+                                </select>
+                                <span class="auth-input-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9"></polyline>
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="auth-form-group" style="margin-bottom: 5px;">
+                        <label class="auth-label">Senha</label>
+                        <div class="auth-input-wrapper">
+                            <input type="password" name="password" class="auth-input" placeholder="Mínimo 8 caracteres"
+                                required>
+                            <span class="auth-input-icon" style="cursor: pointer;">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+                    <p style="font-size: 0.75rem; color: #999; margin-bottom: 20px; padding-left: 10px;">Use letras,
+                        números e símbolos para maior segurança</p>
+
+                    <div class="auth-form-group">
+                        <label class="auth-label">Confirmar Senha</label>
+                        <div class="auth-input-wrapper">
+                            <input type="password" name="confirm_password" class="auth-input"
+                                placeholder="Repita a senha" required>
+                            <span class="auth-input-icon" style="cursor: pointer;">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path
+                                        d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
+                                    </path>
+                                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-auth">
+                        Criar Conta
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="8.5" cy="7" r="4"></circle>
+                            <line x1="20" y1="8" x2="20" y2="14"></line>
+                            <line x1="23" y1="11" x2="17" y2="11"></line>
+                        </svg>
+                    </button>
+
+                    <div class="auth-footer">
+                        Já tem uma conta? <a href="/admin/login">Fazer login</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

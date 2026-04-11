@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financeiro - CRM Casa de Repouso</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <h1>Gestão Financeira</h1>
+        </div>
+    </header>
+
+    <nav class="admin-nav">
+        <ul>
+            <li><a href="/admin">Dashboard</a></li>
+            <li><a href="/admin/leads">Leads (Interessados)</a></li>
+            <li><a href="/admin/residentes">Residentes</a></li>
+            <li><a href="/admin/funcionarios">Funcionários</a></li>
+            <li><a href="/admin/financeiro">Financeiro</a></li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        <h2>Fluxo de Caixa</h2>
+
+        {% if transacoes %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Tipo</th>
+                    <th>Categoria</th>
+                    <th>Valor</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for t in transacoes %}
+                <tr>
+                    <td>{{ t.data.strftime('%d/%m/%Y') if t.data else 'N/A' }}</td>
+                    <td>
+                        {% if t.tipo == 'Receita' %}
+                        <span style="color: #2ecc71; font-weight: bold;">{{ t.tipo }}</span>
+                        {% else %}
+                        <span style="color: #e74c3c; font-weight: bold;">{{ t.tipo }}</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ t.categoria }}</td>
+                    <td>R$ {{ "%.2f"|format(t.valor) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>Nenhuma transação encontrada no período.</p>
+        {% endif %}
+    </main>
+</body>
+
+</html>

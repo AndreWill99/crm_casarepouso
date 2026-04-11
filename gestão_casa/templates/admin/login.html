@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - CRM Casa de Repouso</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <div class="auth-wrapper">
+        <div class="auth-sidebar">
+            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Aconchego Santa Barbara"
+                class="auth-sidebar-logo">
+            <h2>Gestão de Propriedades</h2>
+
+            <ul class="auth-features">
+                <li>Controle financeiro completo</li>
+                <li>Gestão de funcionários</li>
+                <li>Relatórios em tempo real</li>
+                <li>Dashboard interativo</li>
+            </ul>
+        </div>
+
+        <div class="auth-main">
+            <div class="auth-form-container">
+                <div class="auth-subtitle">Bem-vindo de volta</div>
+                <h1 class="auth-title">Entrar na<br>sua conta</h1>
+                <p class="auth-desc">Insira suas credenciais para acessar o sistema.</p>
+
+                <form action="/admin/login" method="POST">
+                    <div class="auth-form-group">
+                        <label class="auth-label">Nome de Usuário</label>
+                        <div class="auth-input-wrapper">
+                            <input type="text" name="username" class="auth-input" placeholder="ex: joao.silva" required>
+                            <span class="auth-input-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="auth-form-group">
+                        <label class="auth-label">Senha</label>
+                        <div class="auth-input-wrapper">
+                            <input type="password" name="password" class="auth-input" placeholder="••••••••" required>
+                            <span class="auth-input-icon" style="cursor: pointer;">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+
+                    <a href="/admin/recover-password" class="forgot-password">Esqueci minha senha</a>
+
+                    <button type="submit" class="btn-auth">
+                        Entrar
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </button>
+
+                    <div class="auth-footer">
+                        Não tem uma conta? <a href="/admin/register">Cadastre-se</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

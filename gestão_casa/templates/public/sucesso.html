@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orçamento Estimado - Casa de Repouso</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body style="display: flex; flex-direction: column; min-height: 100vh;">
+    <header class="top-header">
+        <div class="container header-container">
+            <div class="logo">
+                <i class="bi bi-house-heart-fill" style="color: #7A1515; font-size: 2rem; margin-right: 8px;"></i>
+                <span class="logo-text" style="color: #7A1515; font-weight: bold; font-size: 1.5rem;">Casa de
+                    Repouso</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="container text-center success-page" style="flex: 1;">
+        <div class="success-card">
+            <i class="bi bi-check-circle-fill"
+                style="font-size: 4rem; color: #2ecc71; margin-bottom: 20px; display: inline-block;"></i>
+            <h2 style="color: #333;">Pedido Registrado!</h2>
+            <p>Obrigado pelo seu interesse. Recebemos os seus dados e o grau de dependência selecionado.</p>
+
+            <div class="price-estimate">
+                <p>Estimativa Mensal</p>
+                <div class="valor">R$ {{ "%.2f"|format(valor) }}</div>
+                <small style="color: var(--text-muted); font-size: 0.85rem;">* Valor sujeito a avaliação presencial
+                    detalhada.</small>
+            </div>
+
+            <a href="/" class="btn btn-primary btn-pill mt-3 w-100">Voltar à Página Inicial</a>
+        </div>
+    </main>
+
+    <footer class="main-footer bg-primary text-white mt-auto">
+        <div class="container footer-content text-center">
+            <div class="footer-logo">
+                <i class="bi bi-house-heart-fill" style="font-size: 2rem; margin-bottom: 8px;"></i><br>
+                <span style="font-size:1.2rem; font-weight:bold;">Casa de Repouso</span>
+            </div>
+            <div class="footer-bottom">
+                <small>Rodovi</small>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

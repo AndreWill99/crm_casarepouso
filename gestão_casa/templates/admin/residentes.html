@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Residentes - CRM Casa de Repouso</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <h1>Gestão de Residentes</h1>
+        </div>
+    </header>
+
+    <nav class="admin-nav">
+        <ul>
+            <li><a href="/admin">Dashboard</a></li>
+            <li><a href="/admin/leads">Leads (Interessados)</a></li>
+            <li><a href="/admin/residentes">Residentes</a></li>
+            <li><a href="/admin/funcionarios">Funcionários</a></li>
+            <li><a href="/admin/financeiro">Financeiro</a></li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        <h2>Residentes Atuais</h2>
+
+        {% if residentes %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Data Admissão</th>
+                    <th>Grau</th>
+                    <th>Status Saúde</th>
+                    <th>Responsável</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for res in residentes %}
+                <tr>
+                    <td>{{ res.nome }}</td>
+                    <td>{{ res.data_admissao.strftime('%d/%m/%Y') if res.data_admissao else 'N/A' }}</td>
+                    <td>Grau {{ res.grau }}</td>
+                    <td>{{ res.status_saude }}</td>
+                    <td>{{ res.responsavel_contato }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>Nenhum residente cadastrado.</p>
+        {% endif %}
+
+        <br>
+        <a href="/admin/exportar-excel" class="btn btn-secondary">💾 Exportar Relatório de Residentes (Excel)</a>
+    </main>
+</body>
+
+</html>
