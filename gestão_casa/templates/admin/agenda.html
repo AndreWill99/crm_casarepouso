@@ -1,0 +1,212 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}Agenda - CRM Casa de Repouso{% endblock %}
+
+{% block topbar_actions %}
+<div class="search-filter-group"
+    style="position: absolute; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; align-items: center;">
+    <div class="topbar-search-wrapper">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" class="topbar-search-input" placeholder="Buscar evento...">
+    </div>
+
+    <button class="topbar-btn-filter">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="4" y1="6" x2="20" y2="6"></line>
+            <line x1="7" y1="12" x2="17" y2="12"></line>
+            <line x1="10" y1="18" x2="14" y2="18"></line>
+        </svg>
+    </button>
+</div>
+
+<button class="topbar-btn-fill">
+    + Novo Evento
+</button>
+{% endblock %}
+
+{% block content %}
+<div class="agenda-dashboard">
+    <!-- Row 1: Header / Navigation -->
+    <div class="agenda-top-header">
+        <h2 class="agenda-main-title">Agenda</h2>
+        <div class="agenda-top-tools">
+            <div class="agenda-legend-top">
+                <span class="legend-type"><span class="dot" style="background:#548cfa;"></span> Visita Familiar</span>
+                <span class="legend-type"><span class="dot" style="background:#2ecc71;"></span> Evento</span>
+                <span class="legend-type"><span class="dot" style="background:#f1c40f;"></span> Data Festiva</span>
+            </div>
+            <div class="agenda-view-tabs">
+                <button class="view-tab active">Mês</button>
+                <button class="view-tab">Semana</button>
+                <button class="view-tab">Lista</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="agenda-layout-grid">
+        <!-- Left: Calendar -->
+        <div class="calendar-panel">
+            <div class="calendar-nav-header">
+                <button class="cal-nav-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg></button>
+                <h3 class="cal-month-title">Julho 2025</h3>
+                <button class="cal-nav-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg></button>
+            </div>
+
+            <div class="calendar-grid">
+                <div class="cal-day-header">DOM</div>
+                <div class="cal-day-header">SEG</div>
+                <div class="cal-day-header">TER</div>
+                <div class="cal-day-header">QUA</div>
+                <div class="cal-day-header">QUI</div>
+                <div class="cal-day-header">SEX</div>
+                <div class="cal-day-header">SÁB</div>
+
+                <!-- Week 1 -->
+                <div class="cal-cell faded"><span class="cal-date">29</span></div>
+                <div class="cal-cell faded"><span class="cal-date">30</span></div>
+                <div class="cal-cell"><span class="cal-date">1</span></div>
+                <div class="cal-cell"><span class="cal-date">2</span>
+                    <div class="cal-event bg-pale-blue text-dark-blue">Fam. Sr. João</div>
+                </div>
+                <div class="cal-cell"><span class="cal-date">3</span></div>
+                <div class="cal-cell"><span class="cal-date">4</span>
+                    <div class="cal-event bg-pale-green text-dark-green">Igreja Batista</div>
+                </div>
+                <div class="cal-cell"><span class="cal-date">5</span></div>
+
+                <!-- Week 2 -->
+                <div class="cal-cell"><span class="cal-date">6</span></div>
+                <div class="cal-cell"><span class="cal-date">7</span>
+                    <div class="cal-event bg-pale-blue text-dark-blue">Fam. Sra. Rosa</div>
+                </div>
+                <div class="cal-cell"><span class="cal-date">8</span></div>
+                <div class="cal-cell"><span class="cal-date">9</span>
+                    <div class="cal-event bg-pale-yellow text-dark-yellow"
+                        style="display:flex; align-items:center; gap:4px;"><svg width="10" height="10"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg> Aniv. Sr. Pedro</div>
+                </div>
+                <div class="cal-cell"><span class="cal-date">10</span>
+                    <div class="cal-event bg-pale-blue text-dark-blue">Fam. Sr. Carlos</div>
+                </div>
+                <div class="cal-cell"><span class="cal-date">11</span></div>
+                <div class="cal-cell"><span class="cal-date">12</span>
+                    <div class="cal-event bg-pale-green text-dark-green">ONG Esperança</div>
+                </div>
+
+                <!-- Week 3 -->
+                <div class="cal-cell"><span class="cal-date">13</span></div>
+                <div class="cal-cell"><span class="cal-date">14</span></div>
+                <div class="cal-cell active-today"><span class="cal-date">15</span>
+                    <div class="cal-event bg-pale-blue text-dark-blue">Visita Ana Lima</div>
+                    <div class="cal-event bg-pale-yellow text-dark-yellow"
+                        style="display:flex; align-items:center; gap:4px;"><svg width="10" height="10"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg> Aniv. Sra. Elza</div>
+                </div>
+                <div class="cal-cell"><span class="cal-date">16</span></div>
+                <div class="cal-cell"><span class="cal-date">17</span>
+                    <div class="cal-event bg-pale-green text-dark-green">Coral da Paz</div>
+                </div>
+                <div class="cal-cell"><span class="cal-date">18</span>
+                    <div class="cal-event bg-pale-blue text-dark-blue">Fam. Sra. Maria</div>
+                </div>
+                <div class="cal-cell"><span class="cal-date">19</span></div>
+
+                <!-- Week 4 -->
+                <div class="cal-cell"><span class="cal-date">20</span></div>
+                <div class="cal-cell"><span class="cal-date">21</span>
+                    <div class="cal-event bg-pale-blue text-dark-blue">Fam. Sr. Antônio</div>
+                </div>
+                <div class="cal-cell"><span class="cal-date">22</span></div>
+                <div class="cal-cell"><span class="cal-date">23</span>
+                    <div class="cal-event bg-pale-yellow text-dark-yellow"
+                        style="display:flex; align-items:center; gap:4px;"><svg width="10" height="10"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg> Aniv. Sr. João</div>
+                </div>
+                <div class="cal-cell"><span class="cal-date">24</span>
+                    <div class="cal-event bg-pale-blue text-dark-blue">Visita Carlos M.</div>
+                </div>
+                <div class="cal-cell"><span class="cal-date">25</span>
+                    <div class="cal-event bg-pale-green text-dark-green">Visita ONG</div>
+                </div>
+                <div class="cal-cell"><span class="cal-date">26</span></div>
+
+                <!-- Week 5 -->
+                <div class="cal-cell"><span class="cal-date">27</span></div>
+                <div class="cal-cell"><span class="cal-date">28</span>
+                    <div class="cal-event bg-pale-blue text-dark-blue">Fam. Sra. Helena</div>
+                </div>
+                <div class="cal-cell"><span class="cal-date">29</span></div>
+                <div class="cal-cell"><span class="cal-date">30</span></div>
+                <div class="cal-cell"><span class="cal-date">31</span>
+                    <div class="cal-event bg-pale-yellow text-dark-yellow"
+                        style="display:flex; align-items:center; gap:4px;"><svg width="10" height="10"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg> Aniv. Sra. Rosa</div>
+                </div>
+                <div class="cal-cell faded"><span class="cal-date">1</span></div>
+                <div class="cal-cell faded"><span class="cal-date">2</span></div>
+            </div>
+        </div>
+
+        <!-- Right: Próximos Eventos -->
+        <div class="events-sidebar-panel box-panel shadow-sm" style="background:#fff; height: fit-content;">
+            <h3 class="panel-title text-red" style="display:flex; align-items:center; gap:8px;">📆 Próximos Eventos</h3>
+
+            <div class="upcoming-events-list">
+                <!-- Event 1 -->
+                <div class="upcoming-item">
+                    <span class="cal-badge bg-pale-blue text-dark-blue">Visita Familiar</span>
+                    <div class="up-title">Família de Ana Lima</div>
+                    <div class="up-desc">Hoje, 14h00 · Sr. José Lima</div>
+                </div>
+                <!-- Event 2 -->
+                <div class="upcoming-item">
+                    <span class="cal-badge bg-pale-yellow text-dark-yellow"
+                        style="display:flex; align-items:center; gap:4px;"><svg width="12" height="12"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg> Aniversário</span>
+                    <div class="up-title">Sra. Elza dos Santos</div>
+                    <div class="up-desc">Hoje, 16h00 · 83 anos</div>
+                </div>
+                <!-- Event 3 -->
+                <div class="upcoming-item">
+                    <span class="cal-badge bg-pale-green text-dark-green">Evento</span>
+                    <div class="up-title">Coral da Paz</div>
+                    <div class="up-desc">Qui 17, 10h00</div>
+                </div>
+                <!-- Event 4 -->
+                <div class="upcoming-item">
+                    <span class="cal-badge bg-pale-blue text-dark-blue">Visita Familiar</span>
+                    <div class="up-title">Família de Carlos M.</div>
+                    <div class="up-desc">Sex 18, 15h30 · Sra. Maria</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

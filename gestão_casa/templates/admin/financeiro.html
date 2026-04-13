@@ -1,64 +1,354 @@
-<!DOCTYPE html>
-<html lang="pt-PT">
+{% extends "admin/admin_base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Financeiro - CRM Casa de Repouso</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
+{% block title %}Financeiro - CRM Casa de Repouso{% endblock %}
 
-<body>
-    <header>
-        <div class="container">
-            <h1>Gestão Financeira</h1>
+{% block topbar_actions %}
+<div class="search-filter-group"
+    style="position: absolute; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; align-items: center;">
+    <div class="topbar-search-wrapper">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" class="topbar-search-input" placeholder="">
+    </div>
+
+    <button class="topbar-btn-filter">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="4" y1="6" x2="20" y2="6"></line>
+            <line x1="7" y1="12" x2="17" y2="12"></line>
+            <line x1="10" y1="18" x2="14" y2="18"></line>
+        </svg>
+    </button>
+</div>
+
+<button class="topbar-btn-fill">
+    Exportar
+</button>
+
+<button class="topbar-btn-outline" onclick="abrirDrawerTransacao()">
+    + Adicionar
+</button>
+{% endblock %}
+
+{% block content %}
+<div class="financeiro-dashboard">
+    <!-- Row 1: Cards Grid -->
+    <div class="fin-cards-grid">
+        <div class="fin-card shadow-sm">
+            <span class="fin-card-title text-fw-600">Entradas</span>
+            <span class="fin-card-value" style="color: #1e7a36;">R$ 24.560,00</span>
         </div>
-    </header>
+        <div class="fin-card shadow-sm">
+            <span class="fin-card-title text-fw-600">Despesas</span>
+            <span class="fin-card-value" style="color: #7a1515;">R$ 12.000,00</span>
+        </div>
+        <div class="fin-card shadow-sm">
+            <span class="fin-card-title text-fw-600">Saldo total</span>
+            <span class="fin-card-value" style="color: #4a0d0d;">R$ 12.560,00</span>
+        </div>
+    </div>
 
-    <nav class="admin-nav">
-        <ul>
-            <li><a href="/admin">Dashboard</a></li>
-            <li><a href="/admin/leads">Leads (Interessados)</a></li>
-            <li><a href="/admin/residentes">Residentes</a></li>
-            <li><a href="/admin/funcionarios">Funcionários</a></li>
-            <li><a href="/admin/financeiro">Financeiro</a></li>
-        </ul>
-    </nav>
+    <!-- Row 2: Chart Card -->
+    <div class="fin-chart-card shadow-sm mt-4">
+        <div class="fin-chart-header">
+            <div>
+                <h3 style="margin: 0; color: #555; font-size: 1.1rem;">Desempenho Mensal</h3>
+                <span style="font-size: 0.85rem; color: #888;">Visão geral do ano de 2024</span>
+            </div>
+            <div class="fin-chart-legend">
+                <span class="legend-item"><span class="dot" style="background: #cfc8bd;"></span> MESES ANTERIORES</span>
+                <span class="legend-item"><span class="dot" style="background: #7a1515;"></span> MÊS ATUAL</span>
+            </div>
+        </div>
 
-    <main class="container">
-        <h2>Fluxo de Caixa</h2>
+        <div class="chart-container">
+            <div class="chart-y-axis">
+                <span>100</span>
+                <span>75</span>
+                <span>25</span>
+                <span>0</span>
+            </div>
+            <div class="chart-area">
+                <!-- Bar 1 -->
+                <div class="chart-column">
+                    <span class="chart-bar-val">62</span>
+                    <div class="chart-bar">
+                        <div class="chart-fill bg-gray-bar" style="height: 62%;"></div>
+                    </div>
+                    <span class="chart-bar-label">Jan</span>
+                </div>
+                <!-- Bar 2 -->
+                <div class="chart-column">
+                    <span class="chart-bar-val">48</span>
+                    <div class="chart-bar">
+                        <div class="chart-fill bg-gray-bar" style="height: 48%;"></div>
+                    </div>
+                    <span class="chart-bar-label">Fev</span>
+                </div>
+                <!-- Bar 3 -->
+                <div class="chart-column">
+                    <span class="chart-bar-val">75</span>
+                    <div class="chart-bar">
+                        <div class="chart-fill bg-gray-bar" style="height: 75%;"></div>
+                    </div>
+                    <span class="chart-bar-label">Mar</span>
+                </div>
+                <!-- Bar 4 -->
+                <div class="chart-column">
+                    <span class="chart-bar-val">83</span>
+                    <div class="chart-bar">
+                        <div class="chart-fill bg-gray-bar" style="height: 83%;"></div>
+                    </div>
+                    <span class="chart-bar-label">Abr</span>
+                </div>
+                <!-- Bar 5 -->
+                <div class="chart-column">
+                    <span class="chart-bar-val">59</span>
+                    <div class="chart-bar">
+                        <div class="chart-fill bg-gray-bar" style="height: 59%;"></div>
+                    </div>
+                    <span class="chart-bar-label">Mai</span>
+                </div>
+                <!-- Bar 6 -->
+                <div class="chart-column">
+                    <span class="chart-bar-val">91</span>
+                    <div class="chart-bar">
+                        <div class="chart-fill bg-gray-bar" style="height: 91%;"></div>
+                    </div>
+                    <span class="chart-bar-label">Jun</span>
+                </div>
+                <!-- Bar 7 -->
+                <div class="chart-column">
+                    <span class="chart-bar-val">68</span>
+                    <div class="chart-bar">
+                        <div class="chart-fill bg-gray-bar" style="height: 68%;"></div>
+                    </div>
+                    <span class="chart-bar-label">Jul</span>
+                </div>
+                <!-- Bar 8 -->
+                <div class="chart-column">
+                    <span class="chart-bar-val">77</span>
+                    <div class="chart-bar">
+                        <div class="chart-fill bg-gray-bar" style="height: 77%;"></div>
+                    </div>
+                    <span class="chart-bar-label">Ago</span>
+                </div>
+                <!-- Bar 9 -->
+                <div class="chart-column">
+                    <span class="chart-bar-val">55</span>
+                    <div class="chart-bar">
+                        <div class="chart-fill bg-gray-bar" style="height: 55%;"></div>
+                    </div>
+                    <span class="chart-bar-label">Set</span>
+                </div>
+                <!-- Bar 10 -->
+                <div class="chart-column">
+                    <span class="chart-bar-val">88</span>
+                    <div class="chart-bar">
+                        <div class="chart-fill bg-gray-bar" style="height: 88%;"></div>
+                    </div>
+                    <span class="chart-bar-label">Out</span>
+                </div>
+                <!-- Bar 11 (Current) -->
+                <div class="chart-column">
+                    <span class="chart-bar-val text-red">94</span>
+                    <div class="chart-bar">
+                        <div class="chart-fill bg-red-bar" style="height: 94%;"></div>
+                    </div>
+                    <span class="chart-bar-label text-red text-fw-600">Nov</span>
+                </div>
+                <!-- Bar 12 -->
+                <div class="chart-column">
+                    <span class="chart-bar-val">-</span>
+                    <div class="chart-bar">
+                        <div class="chart-fill bg-light-gray-bar" style="height: 10%;"></div>
+                    </div>
+                    <span class="chart-bar-label">Dez</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        {% if transacoes %}
-        <table>
-            <thead>
-                <tr>
-                    <th>Data</th>
-                    <th>Tipo</th>
-                    <th>Categoria</th>
-                    <th>Valor</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for t in transacoes %}
-                <tr>
-                    <td>{{ t.data.strftime('%d/%m/%Y') if t.data else 'N/A' }}</td>
-                    <td>
-                        {% if t.tipo == 'Receita' %}
-                        <span style="color: #2ecc71; font-weight: bold;">{{ t.tipo }}</span>
-                        {% else %}
-                        <span style="color: #e74c3c; font-weight: bold;">{{ t.tipo }}</span>
-                        {% endif %}
-                    </td>
-                    <td>{{ t.categoria }}</td>
-                    <td>R$ {{ "%.2f"|format(t.valor) }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        {% else %}
-        <p>Nenhuma transação encontrada no período.</p>
-        {% endif %}
-    </main>
-</body>
+    <!-- Row 3: Table and Controls -->
+    <div class="fin-table-controls">
+        <button class="sort-drop-btn">ordenar por
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="8" y1="6" x2="21" y2="6"></line>
+                <line x1="8" y1="12" x2="21" y2="12"></line>
+                <line x1="8" y1="18" x2="21" y2="18"></line>
+                <line x1="3" y1="6" x2="3" y2="6"></line>
+                <line x1="3" y1="12" x2="3" y2="12"></line>
+                <line x1="3" y1="18" x2="3" y2="18"></line>
+            </svg>
+        </button>
+    </div>
 
-</html>
+    <div class="fin-list-header-row mt-4">
+        <div class="col-cat">Categoria <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <line x1="8" y1="6" x2="21" y2="6"></line>
+                <line x1="8" y1="12" x2="21" y2="12"></line>
+                <line x1="8" y1="18" x2="21" y2="18"></line>
+                <line x1="3" y1="6" x2="3" y2="6"></line>
+                <line x1="3" y1="12" x2="3" y2="12"></line>
+                <line x1="3" y1="18" x2="3" y2="18"></line>
+            </svg></div>
+        <div class="col-desc">Descrição <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <line x1="8" y1="6" x2="21" y2="6"></line>
+                <line x1="8" y1="12" x2="21" y2="12"></line>
+                <line x1="8" y1="18" x2="21" y2="18"></line>
+                <line x1="3" y1="6" x2="3" y2="6"></line>
+                <line x1="3" y1="12" x2="3" y2="12"></line>
+                <line x1="3" y1="18" x2="3" y2="18"></line>
+            </svg></div>
+        <div class="col-date">Data <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <line x1="8" y1="6" x2="21" y2="6"></line>
+                <line x1="8" y1="12" x2="21" y2="12"></line>
+                <line x1="8" y1="18" x2="21" y2="18"></line>
+                <line x1="3" y1="6" x2="3" y2="6"></line>
+                <line x1="3" y1="12" x2="3" y2="12"></line>
+                <line x1="3" y1="18" x2="3" y2="18"></line>
+            </svg></div>
+        <div class="col-val">Valor <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <line x1="8" y1="6" x2="21" y2="6"></line>
+                <line x1="8" y1="12" x2="21" y2="12"></line>
+                <line x1="8" y1="18" x2="21" y2="18"></line>
+                <line x1="3" y1="6" x2="3" y2="6"></line>
+                <line x1="3" y1="12" x2="3" y2="12"></line>
+                <line x1="3" y1="18" x2="3" y2="18"></line>
+            </svg></div>
+    </div>
+
+    <div class="fin-list-body">
+        <div class="list-item-row fin-row">
+            <div class="col-cat text-green fw-bold">Mensalidade</div>
+            <div class="col-desc">mensalidade senhor chance</div>
+            <div class="col-date">02-04-2026</div>
+            <div class="col-val">R$ 2.600,00</div>
+        </div>
+        <div class="list-item-row fin-row">
+            <div class="col-cat text-red fw-bold">Salário</div>
+            <div class="col-desc">Salário Enfermeira Ana</div>
+            <div class="col-date">05-04-2026</div>
+            <div class="col-val">R$ 2.000,00</div>
+        </div>
+    </div>
+</div>
+
+<!-- Painel Direito: DRAWER (Nova Transação) -->
+<div class="detail-drawer" id="transacao-drawer" style="display: none;">
+
+    <div class="drawer-header" style="display: flex; justify-content: space-between; padding: 30px 30px 10px 30px;">
+        <h2 style="color: var(--primary-color); margin: 0; font-size: 1.4rem;">Nova Transação</h2>
+        <button onclick="fecharDrawerTransacao()"
+            style="background: none; border: none; cursor: pointer; color: var(--primary-color);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+    </div>
+
+    <div class="drawer-content-pane" style="padding: 20px 30px;">
+        <div class="form-group-outline mb-4">
+            <label class="text-primary-sm text-uppercase">TIPO</label>
+            <div class="tipo-toggle-group">
+                <button class="btn-tipo active" id="btn-entrada" onclick="setTipo('entrada')">↑ Entrada</button>
+                <button class="btn-tipo inactive" id="btn-saida" onclick="setTipo('saida')">↓ Saída</button>
+            </div>
+        </div>
+
+        <div class="form-group-outline mb-4">
+            <label class="text-primary-sm text-uppercase">CATEGORIA</label>
+            <div class="custom-select-container">
+                <div class="custom-select-trigger" onclick="toggleCategoriaDrop()">
+                    <span id="categoria-selected">Selecione uma categoria</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 9l6 6 6-6"></path>
+                    </svg>
+                </div>
+                <div class="custom-select-options bg-gray-mock" id="categoria-options" style="display: none;">
+                    <div class="custom-option" onclick="selectCategoria('Receita de Aluguel', '#1e7a36')"><span
+                            class="dot" style="background:#1e7a36;"></span> Receita de Aluguel</div>
+                    <div class="custom-option" onclick="selectCategoria('Serviços Prestados', '#2274A5')"><span
+                            class="dot" style="background:#2274A5;"></span> Serviços Prestados</div>
+                    <div class="custom-option" onclick="selectCategoria('Manutenção', '#D35400')"><span class="dot"
+                            style="background:#D35400;"></span> Manutenção</div>
+                    <div class="custom-option" onclick="selectCategoria('Despesas Fixas', '#7a1515')"><span class="dot"
+                            style="background:#7a1515;"></span> Despesas Fixas</div>
+                    <div class="custom-option" onclick="selectCategoria('Outros', '#8E44AD')"><span class="dot"
+                            style="background:#8E44AD;"></span> Outros</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row-outline mb-4">
+            <div class="form-group-outline">
+                <label class="text-primary-sm text-uppercase">VALOR</label>
+                <input type="text" class="input-outline bg-gray-mock" placeholder="R$ 0,00">
+            </div>
+            <div class="form-group-outline">
+                <label class="text-primary-sm text-uppercase">DATA</label>
+                <input type="text" class="input-outline bg-gray-mock" placeholder="00/00/0000">
+            </div>
+        </div>
+
+        <div class="form-group-outline mb-4">
+            <label class="text-primary-sm text-uppercase">OBSERVAÇÃO</label>
+            <textarea class="textarea-outline bg-gray-mock" rows="4"
+                placeholder="Adicione uma observação..."></textarea>
+        </div>
+
+    </div>
+
+    <div class="drawer-action-buttons mt-auto">
+        <button class="drawer-btn-cancel" onclick="fecharDrawerTransacao()">Cancelar</button>
+        <button class="drawer-btn-confirm" onclick="salvarDrawerTransacao()">Confirmar</button>
+    </div>
+
+</div>
+
+<script>
+    function abrirDrawerTransacao() {
+        document.getElementById('transacao-drawer').style.display = 'flex';
+    }
+
+    function fecharDrawerTransacao() {
+        document.getElementById('transacao-drawer').style.display = 'none';
+        document.getElementById('categoria-options').style.display = 'none';
+    }
+
+    function salvarDrawerTransacao() {
+        fecharDrawerTransacao();
+    }
+
+    function setTipo(tipo) {
+        const btnEntrada = document.getElementById('btn-entrada');
+        const btnSaida = document.getElementById('btn-saida');
+
+        if (tipo === 'entrada') {
+            btnEntrada.className = 'btn-tipo active';
+            btnSaida.className = 'btn-tipo inactive';
+        } else {
+            btnSaida.className = 'btn-tipo active-saida';
+            btnEntrada.className = 'btn-tipo inactive';
+        }
+    }
+
+    function toggleCategoriaDrop() {
+        const options = document.getElementById('categoria-options');
+        options.style.display = options.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function selectCategoria(text, color) {
+        document.getElementById('categoria-selected').innerHTML = `<span class="dot" style="background:${color}; margin-right: 8px;"></span> ${text}`;
+        document.getElementById('categoria-options').style.display = 'none';
+    }
+</script>
+{% endblock %}

@@ -1,66 +1,316 @@
-<!DOCTYPE html>
-<html lang="pt-PT">
+{% extends "admin/admin_base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestão de Leads - CRM</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
+{% block title %}Gestão de Leads - CRM Casa de Repouso{% endblock %}
 
-<body>
-    <header>
-        <div class="container">
-            <h1>Leads (Interessados)</h1>
+{% block topbar_actions %}
+<div class="search-filter-group"
+    style="position: absolute; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; align-items: center;">
+    <div class="topbar-search-wrapper">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" class="topbar-search-input" placeholder="Buscar lead...">
+    </div>
+</div>
+
+<button class="topbar-btn-fill" onclick="abrirDrawerLead()">
+    + Novo Lead
+</button>
+{% endblock %}
+
+{% block content %}
+<div class="leads-dashboard">
+    <!-- Row 1: Cards Grid -->
+    <div class="leads-cards-grid row-mb">
+        <!-- Card 1 -->
+        <div class="fin-card shadow-sm leads-card">
+            <div class="leads-card-icon bg-light-red">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7a1515" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+            </div>
+            <span class="fin-card-title text-fw-600">NOVOS LEADS — JULHO</span>
+            <span class="fin-card-value text-red">34</span>
+            <div class="leads-card-badge badge-green">↑ 12% vs mês anterior</div>
         </div>
-    </header>
+        <!-- Card 2 -->
+        <div class="fin-card shadow-sm leads-card">
+            <div class="leads-card-icon bg-light-green">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1e7a36" stroke-width="2">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+            </div>
+            <span class="fin-card-title text-fw-600">LEADS CONVERTIDOS — JULHO</span>
+            <span class="fin-card-value text-green">8</span>
+            <div class="leads-card-badge badge-green">Taxa: 23.5%</div>
+        </div>
+        <!-- Card 3 -->
+        <div class="fin-card shadow-sm leads-card">
+            <div class="leads-card-icon bg-light-blue">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2274A5" stroke-width="2">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+            </div>
+            <span class="fin-card-title text-fw-600">ALCANCE — VISITAS AO SITE</span>
+            <span class="fin-card-value text-blue">1.248</span>
+            <div class="leads-card-badge badge-blue">↑ 8% esta semana</div>
+        </div>
+    </div>
 
-    <nav class="admin-nav">
-        <ul>
-            <li><a href="/admin">Dashboard</a></li>
-            <li><a href="/admin/leads">Leads (Interessados)</a></li>
-            <li><a href="/admin/residentes">Residentes</a></li>
-            <li><a href="/admin/funcionarios">Funcionários</a></li>
-            <li><a href="/admin/financeiro">Financeiro</a></li>
-        </ul>
-    </nav>
+    <!-- Row 2: Layout Grid (Funil and Table) -->
+    <div class="leads-layout-grid container-gap">
 
-    <main class="container">
-        <h2>Lista de Potenciais Clientes</h2>
+        <!-- Left Panel: Funil de Vendas -->
+        <div class="leads-funnel box-panel shadow-sm">
+            <h3 class="panel-title text-red" style="display:flex; align-items:center; gap:8px;"><svg width="18"
+                    height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                </svg> Funil de Vendas</h3>
 
-        {% if leads %}
-        <table>
-            <thead>
-                <tr>
-                    <th>Data</th>
-                    <th>Responsável</th>
-                    <th>Idoso</th>
-                    <th>Telefone</th>
-                    <th>Grau</th>
-                    <th>Valor Estimado</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for lead in leads %}
-                <tr>
-                    <td>{{ lead.data_criacao.strftime('%d/%m/%Y %H:%M') if lead.data_criacao else 'N/A' }}</td>
-                    <td>{{ lead.nome_responsavel }}</td>
-                    <td>{{ lead.nome_idoso }}</td>
-                    <td>{{ lead.telefone }}</td>
-                    <td>Grau {{ lead.grau_patologia }}</td>
-                    <td>R$ {{ "%.2f"|format(lead.valor_estimado) }}</td>
-                    <td><span
-                            style="background: #f1c40f; padding: 2px 8px; border-radius: 4px; font-weight: bold; font-size: 0.8rem;">{{
-                            lead.status }}</span></td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        {% else %}
-        <p>Nenhum lead encontrado no momento.</p>
-        {% endif %}
-    </main>
-</body>
+            <div class="funnel-container">
+                <!-- Bar 1 -->
+                <div class="funnel-row">
+                    <div class="funnel-label">Alcance <span class="funnel-val text-fw-600 text-blue">1.248</span></div>
+                    <div class="funnel-bar-track">
+                        <div class="funnel-bar bg-blue" style="width: 100%;"></div>
+                    </div>
+                </div>
+                <!-- Bar 2 -->
+                <div class="funnel-row">
+                    <div class="funnel-label">Novos Leads <span class="funnel-val text-fw-600 text-red">34</span></div>
+                    <div class="funnel-bar-track">
+                        <div class="funnel-bar bg-red" style="width: 75%;"></div>
+                    </div>
+                </div>
+                <!-- Bar 3 -->
+                <div class="funnel-row">
+                    <div class="funnel-label">Em Contato <span class="funnel-val text-fw-600 text-orange">20</span>
+                    </div>
+                    <div class="funnel-bar-track">
+                        <div class="funnel-bar bg-orange" style="width: 45%;"></div>
+                    </div>
+                </div>
+                <!-- Bar 4 -->
+                <div class="funnel-row">
+                    <div class="funnel-label">Ag. Visita <span class="funnel-val text-fw-600 text-purple">11</span>
+                    </div>
+                    <div class="funnel-bar-track">
+                        <div class="funnel-bar bg-purple" style="width: 25%;"></div>
+                    </div>
+                </div>
+                <!-- Bar 5 -->
+                <div class="funnel-row"
+                    style="margin-top: 15px; border-top: 1px dashed rgba(122,21,21,0.2); padding-top:15px;">
+                    <div class="funnel-label text-green fw-bold">✓ Convertidos <span
+                            class="funnel-val text-fw-600 text-green">8</span></div>
+                    <div class="funnel-bar-track">
+                        <div class="funnel-bar bg-green" style="width: 15%;"></div>
+                    </div>
+                </div>
+            </div>
 
-</html>
+            <div class="funnel-legend">
+                <div class="legend-item"><span class="square bg-red"></span> Novo</div>
+                <div class="legend-item"><span class="square bg-orange"></span> Em Contato</div>
+                <div class="legend-item"><span class="square bg-purple"></span> Ag. Visita</div>
+                <div class="legend-item"><span class="square bg-green"></span> Convertido</div>
+            </div>
+        </div>
+
+        <!-- Right Panel: Lista de Leads -->
+        <div class="leads-list box-panel shadow-sm">
+            <div class="leads-list-header">
+                <h3 class="panel-title text-red">Lista de Leads</h3>
+                <div class="leads-tabs">
+                    <button class="leads-tab-btn active">Todos</button>
+                    <button class="leads-tab-btn">Novos</button>
+                    <button class="leads-tab-btn">Em Contato</button>
+                    <button class="leads-tab-btn">Ag. Visita</button>
+                </div>
+            </div>
+
+            <div class="fin-list-header-row border-bottom-light"
+                style="border-bottom: 1px solid rgba(122,21,21,0.1); margin-top: 20px;">
+                <div class="col-lead-name">INTERESSADO</div>
+                <div class="col-lead-idoso">IDOSO</div>
+                <div class="col-lead-grau">GRAU</div>
+                <div class="col-lead-status">STATUS</div>
+                <div class="col-lead-valor">VALOR EST.</div>
+                <div class="col-lead-acao">AÇÃO</div>
+            </div>
+
+            <div class="leads-list-body">
+                <!-- Item 1 -->
+                <div class="fin-row leads-row">
+                    <div class="col-lead-name">
+                        <div class="avatar bg-red-pale">CM</div> Carlos Mendes
+                    </div>
+                    <div class="col-lead-idoso">Sra. Rosa M.</div>
+                    <div class="col-lead-grau"><span class="grau-badge">G2</span></div>
+                    <div class="col-lead-status"><span class="status-badge bd-blue">Novo</span></div>
+                    <div class="col-lead-valor">R$ 4.200</div>
+                    <div class="col-lead-acao"><button class="btn-outline-action">Ver detalhes</button></div>
+                </div>
+                <!-- Item 2 -->
+                <div class="fin-row leads-row">
+                    <div class="col-lead-name">
+                        <div class="avatar bg-purple-pale">AL</div> Ana Lima
+                    </div>
+                    <div class="col-lead-idoso">Sr. José L.</div>
+                    <div class="col-lead-grau"><span class="grau-badge">G3</span></div>
+                    <div class="col-lead-status"><span class="status-badge bd-purple">Ag. Visita</span></div>
+                    <div class="col-lead-valor">R$ 6.800</div>
+                    <div class="col-lead-acao"><button class="btn-outline-action">Ver detalhes</button></div>
+                </div>
+                <!-- Item 3 -->
+                <div class="fin-row leads-row">
+                    <div class="col-lead-name">
+                        <div class="avatar bg-orange-pale">RS</div> Roberto Silva
+                    </div>
+                    <div class="col-lead-idoso">Sra. Maria S.</div>
+                    <div class="col-lead-grau"><span class="grau-badge">G1</span></div>
+                    <div class="col-lead-status"><span class="status-badge bd-orange">Em Contato</span></div>
+                    <div class="col-lead-valor">R$ 2.800</div>
+                    <div class="col-lead-acao"><button class="btn-outline-action">Ver detalhes</button></div>
+                </div>
+                <!-- Item 4 -->
+                <div class="fin-row leads-row">
+                    <div class="col-lead-name">
+                        <div class="avatar bg-green-pale">FO</div> Fernanda Oliveira
+                    </div>
+                    <div class="col-lead-idoso">Sr. Antônio O.</div>
+                    <div class="col-lead-grau"><span class="grau-badge">G2</span></div>
+                    <div class="col-lead-status"><span class="status-badge bd-green">Convertido</span></div>
+                    <div class="col-lead-valor text-green">R$ 4.500</div>
+                    <div class="col-lead-acao"><button class="btn-outline-action btn-success">Matriculado</button></div>
+                </div>
+                <!-- Item 5 -->
+                <div class="fin-row leads-row">
+                    <div class="col-lead-name">
+                        <div class="avatar bg-red-pale">MC</div> Marcos Costa
+                    </div>
+                    <div class="col-lead-idoso">Sra. Helena C.</div>
+                    <div class="col-lead-grau"><span class="grau-badge">G3</span></div>
+                    <div class="col-lead-status"><span class="status-badge bd-blue">Novo</span></div>
+                    <div class="col-lead-valor">R$ 6.200</div>
+                    <div class="col-lead-acao"><button class="btn-outline-action">Ver detalhes</button></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Painel Direito: DRAWER (Novo Lead) -->
+<div class="detail-drawer" id="lead-drawer" style="display: none;">
+
+    <div class="drawer-header" style="display: flex; justify-content: space-between; padding: 30px 30px 10px 30px;">
+        <h2 style="color: var(--primary-color); margin: 0; font-size: 1.4rem;">Novo Lead</h2>
+        <button onclick="fecharDrawerLead()"
+            style="background: none; border: none; cursor: pointer; color: var(--primary-color);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+    </div>
+
+    <div class="drawer-content-pane" style="padding: 20px 30px; overflow-y: auto;">
+
+        <!-- Contato -->
+        <h4
+            style="color: #7a1515; border-bottom: 1px solid rgba(122,21,21,0.1); padding-bottom: 8px; margin-bottom: 15px; margin-top: 5px;">
+            Dados de Contato</h4>
+        <div class="form-group-outline mb-4">
+            <label class="text-primary-sm text-uppercase">NOME DO INTERESSADO</label>
+            <input type="text" class="input-outline bg-gray-mock" placeholder="Ex: Carlos Mendes">
+        </div>
+        <div class="form-row-outline mb-4">
+            <div class="form-group-outline">
+                <label class="text-primary-sm text-uppercase">TELEFONE / WHATSAPP</label>
+                <input type="text" class="input-outline bg-gray-mock" placeholder="(11) 90000-0000">
+            </div>
+            <div class="form-group-outline">
+                <label class="text-primary-sm text-uppercase">E-MAIL</label>
+                <input type="email" class="input-outline bg-gray-mock" placeholder="carlos@email.com">
+            </div>
+        </div>
+
+        <!-- Idoso -->
+        <h4
+            style="color: #7a1515; border-bottom: 1px solid rgba(122,21,21,0.1); padding-bottom: 8px; margin-bottom: 15px;">
+            Sobre o Idoso</h4>
+        <div class="form-group-outline mb-4">
+            <label class="text-primary-sm text-uppercase">NOME DO IDOSO</label>
+            <input type="text" class="input-outline bg-gray-mock" placeholder="Ex: Sra. Rosa M.">
+        </div>
+        <div class="form-row-outline mb-4">
+            <div class="form-group-outline">
+                <label class="text-primary-sm text-uppercase">IDADE / GÊNERO</label>
+                <input type="text" class="input-outline bg-gray-mock" placeholder="82 anos, Fem">
+            </div>
+            <div class="form-group-outline">
+                <label class="text-primary-sm text-uppercase">GRAU DE PATOLOGIA</label>
+                <select class="input-outline bg-gray-mock"
+                    style="width: 100%; border: 1px solid var(--primary-color); border-radius: 12px; padding: 12px 15px; color: #555;">
+                    <option>G1 - Independente</option>
+                    <option>G2 - Dependência Parcial</option>
+                    <option>G3 - Dependência Total</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Info Site -->
+        <h4
+            style="color: #7a1515; border-bottom: 1px solid rgba(122,21,21,0.1); padding-bottom: 8px; margin-bottom: 15px;">
+            Informações Enviadas (Site)</h4>
+        <div class="form-group-outline mb-4">
+            <label class="text-primary-sm text-uppercase">MENSAGEM ORIGINAL</label>
+            <textarea class="textarea-outline bg-gray-mock" rows="3"
+                placeholder="Mensagem deixada no formulário de contato do site..."></textarea>
+        </div>
+
+        <!-- Status -->
+        <h4
+            style="color: #7a1515; border-bottom: 1px solid rgba(122,21,21,0.1); padding-bottom: 8px; margin-bottom: 15px;">
+            Status do Lead</h4>
+        <div class="form-group-outline mb-4">
+            <label class="text-primary-sm text-uppercase">ETAPA NO FUNIL</label>
+            <select class="input-outline bg-gray-mock"
+                style="width: 100%; border: 1px solid var(--primary-color); border-radius: 12px; padding: 12px 15px; color: #555;">
+                <option>Novo</option>
+                <option>Em Contato</option>
+                <option>Agendou Visita</option>
+                <option>Convertido (Matriculado)</option>
+            </select>
+        </div>
+
+    </div>
+
+    <div class="drawer-action-buttons mt-auto">
+        <button class="drawer-btn-cancel" onclick="fecharDrawerLead()">Cancelar</button>
+        <button class="drawer-btn-confirm" onclick="salvarDrawerLead()">Salvar Lead</button>
+    </div>
+
+</div>
+
+<script>
+    function abrirDrawerLead() {
+        document.getElementById('lead-drawer').style.display = 'flex';
+    }
+
+    function fecharDrawerLead() {
+        document.getElementById('lead-drawer').style.display = 'none';
+    }
+
+    function salvarDrawerLead() {
+        fecharDrawerLead();
+    }
+</script>
+{% endblock %}

@@ -1,63 +1,532 @@
-<!DOCTYPE html>
-<html lang="pt-PT">
+{% extends "admin/admin_base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Funcionários - CRM Casa de Repouso</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
+{% block title %}Funcionários - CRM Casa de Repouso{% endblock %}
 
-<body>
-    <header>
-        <div class="container">
-            <h1>Gestão de Funcionários</h1>
+{% block topbar_actions %}
+<div class="search-filter-group"
+    style="position: absolute; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; align-items: center;">
+    <div class="topbar-search-wrapper">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" class="topbar-search-input" placeholder="">
+    </div>
+
+    <button class="topbar-btn-filter">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="4" y1="6" x2="20" y2="6"></line>
+            <line x1="7" y1="12" x2="17" y2="12"></line>
+            <line x1="10" y1="18" x2="14" y2="18"></line>
+        </svg>
+    </button>
+</div>
+
+<button class="topbar-btn-fill">
+    Exportar
+</button>
+
+<button class="topbar-btn-outline" onclick="abrirDrawer(true)">
+    + Adicionar
+</button>
+{% endblock %}
+
+{% block content %}
+<div class="master-detail-layout" id="funcionarios-layout">
+    <!-- Painel Esquerdo: LISTA -->
+    <div class="master-list">
+        <div class="list-header-row">
+            <div class="col-icon"></div>
+            <div class="col-nome" style="cursor: pointer;" onclick="sortRows('nome')">Nome <svg width="14" height="14"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="8" y1="6" x2="21" y2="6"></line>
+                    <line x1="8" y1="12" x2="21" y2="12"></line>
+                    <line x1="8" y1="18" x2="21" y2="18"></line>
+                    <line x1="3" y1="6" x2="3" y2="6"></line>
+                    <line x1="3" y1="12" x2="3" y2="12"></line>
+                    <line x1="3" y1="18" x2="3" y2="18"></line>
+                </svg></div>
+            <div class="col-cargo" style="cursor: pointer;" onclick="sortRows('cargo')">Cargo <svg width="14"
+                    height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="8" y1="6" x2="21" y2="6"></line>
+                    <line x1="8" y1="12" x2="21" y2="12"></line>
+                    <line x1="8" y1="18" x2="21" y2="18"></line>
+                    <line x1="3" y1="6" x2="3" y2="6"></line>
+                    <line x1="3" y1="12" x2="3" y2="12"></line>
+                    <line x1="3" y1="18" x2="3" y2="18"></line>
+                </svg></div>
+            <div class="col-idade" style="cursor: pointer;" onclick="sortRows('idade')">Idade <svg width="14"
+                    height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="8" y1="6" x2="21" y2="6"></line>
+                    <line x1="8" y1="12" x2="21" y2="12"></line>
+                    <line x1="8" y1="18" x2="21" y2="18"></line>
+                    <line x1="3" y1="6" x2="3" y2="6"></line>
+                    <line x1="3" y1="12" x2="3" y2="12"></line>
+                    <line x1="3" y1="18" x2="3" y2="18"></line>
+                </svg></div>
+            <div class="col-tel" style="cursor: pointer;" onclick="sortRows('tel')">Telefone <svg width="14" height="14"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="8" y1="6" x2="21" y2="6"></line>
+                    <line x1="8" y1="12" x2="21" y2="12"></line>
+                    <line x1="8" y1="18" x2="21" y2="18"></line>
+                    <line x1="3" y1="6" x2="3" y2="6"></line>
+                    <line x1="3" y1="12" x2="3" y2="12"></line>
+                    <line x1="3" y1="18" x2="3" y2="18"></line>
+                </svg></div>
+            <div class="col-status" style="cursor: pointer;" onclick="sortRows('status')">Status <svg width="14"
+                    height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="8" y1="6" x2="21" y2="6"></line>
+                    <line x1="8" y1="12" x2="21" y2="12"></line>
+                    <line x1="8" y1="18" x2="21" y2="18"></line>
+                    <line x1="3" y1="6" x2="3" y2="6"></line>
+                    <line x1="3" y1="12" x2="3" y2="12"></line>
+                    <line x1="3" y1="18" x2="3" y2="18"></line>
+                </svg></div>
+            <div class="col-data" style="cursor: pointer;" onclick="sortRows('data')">data entrada <svg width="14"
+                    height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="8" y1="6" x2="21" y2="6"></line>
+                    <line x1="8" y1="12" x2="21" y2="12"></line>
+                    <line x1="8" y1="18" x2="21" y2="18"></line>
+                    <line x1="3" y1="6" x2="3" y2="6"></line>
+                    <line x1="3" y1="12" x2="3" y2="12"></line>
+                    <line x1="3" y1="18" x2="3" y2="18"></line>
+                </svg></div>
         </div>
-    </header>
 
-    <nav class="admin-nav">
-        <ul>
-            <li><a href="/admin">Dashboard</a></li>
-            <li><a href="/admin/leads">Leads (Interessados)</a></li>
-            <li><a href="/admin/residentes">Residentes</a></li>
-            <li><a href="/admin/funcionarios">Funcionários</a></li>
-            <li><a href="/admin/financeiro">Financeiro</a></li>
-        </ul>
-    </nav>
+        <!-- Linhas Mock -->
+        <div class="list-body">
+            <div class="list-item-row" onclick="abrirDrawer(false, this)">
+                <div class="col-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                </div>
+                <div class="col-nome align-flex">
+                    <div class="avatar-circle"></div> Chance Vetrovs
+                </div>
+                <div class="col-cargo">Enfermeiro</div>
+                <div class="col-idade">87</div>
+                <div class="col-tel">(00) 0000-0000</div>
+                <div class="col-status"><span class="badge-status status-ativo">Ativo</span></div>
+                <div class="col-data">02-04-2025</div>
+            </div>
 
-    <main class="container">
-        <h2>Equipe Profissional</h2>
+            <div class="list-item-row" onclick="abrirDrawer(false, this)">
+                <div class="col-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                </div>
+                <div class="col-nome align-flex">
+                    <div class="avatar-circle"></div> Emery Aminoff
+                </div>
+                <div class="col-cargo">Cozinheira</div>
+                <div class="col-idade">82</div>
+                <div class="col-tel">(00) 0000-0000</div>
+                <div class="col-status"><span class="badge-status status-desligado">Desligado</span></div>
+                <div class="col-data">05-06-2025</div>
+            </div>
 
-        <p><i>Nota: Base de dados retornando `funcionarios`. No protótipo atual, esta rota precisa ser implementada no
-                app.py para listagem, ou se não houver rota com a var, será exibida a mensagem abaixo.</i></p>
+            <div class="list-item-row" onclick="abrirDrawer(false, this)">
+                <div class="col-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                </div>
+                <div class="col-nome align-flex">
+                    <div class="avatar-circle"></div> Gustavo Geidt
+                </div>
+                <div class="col-cargo">Enfermeiro</div>
+                <div class="col-idade">78</div>
+                <div class="col-tel">(00) 0000-0000</div>
+                <div class="col-status"><span class="badge-status status-afastado">Afastado</span></div>
+                <div class="col-data">23-07-2024</div>
+            </div>
 
-        {% if funcionarios %}
-        <table>
-            <thead>
-                <tr>
-                    <th>Nome</th>
-                    <th>Cargo</th>
-                    <th>Salário Base</th>
-                    <th>Data Admissão</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for func in funcionarios %}
-                <tr>
-                    <td>{{ func.nome }}</td>
-                    <td>{{ func.cargo }}</td>
-                    <td>R$ {{ "%.2f"|format(func.salario_base) }}</td>
-                    <td>{{ func.data_admissao.strftime('%d/%m/%Y') if func.data_admissao else 'N/A' }}</td>
-                    <td>{{ func.status }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        {% else %}
-        <p>Nenhum funcionário encontrado.</p>
-        {% endif %}
-    </main>
-</body>
+        </div>
+    </div>
 
-</html>
+    <!-- Painel Direito: DRAWER -->
+    <div class="detail-drawer" id="side-drawer" style="display: none;">
+        <!-- Drawer Tabs -->
+        <div class="drawer-tabs">
+            <button class="tab-btn active" onclick="switchTab('tab-perfil', this)">Perfil</button>
+            <button class="tab-btn" onclick="switchTab('tab-financeiro', this)">Financeiro</button>
+            <button class="tab-btn" onclick="switchTab('tab-registro', this)">Registro</button>
+        </div>
+
+        <div class="drawer-content-pane">
+            <!-- ABA PERFIL -->
+            <div id="tab-perfil" class="tab-content active">
+                <div class="perfil-header-grid">
+                    <div class="perfil-avatar-col">
+                        <div class="avatar-large"></div>
+                    </div>
+                    <div class="perfil-fields-col">
+                        <div class="form-group-outline">
+                            <label>Nome</label>
+                            <input type="text" id="drawer-input-nome" class="input-outline">
+                        </div>
+                        <div class="form-row-outline">
+                            <div class="form-group-outline">
+                                <label>Data de nascimento</label>
+                                <input type="text" class="input-outline" placeholder="00/00/0000">
+                            </div>
+                            <div class="form-group-outline">
+                                <label>Data de admissão</label>
+                                <input type="text" class="input-outline" placeholder="00/00/0000">
+                            </div>
+                        </div>
+                        <div class="form-row-outline">
+                            <div class="form-group-outline">
+                                <label>CPF</label>
+                                <input type="text" class="input-outline bg-gray-mock" placeholder="000.000.000-00">
+                            </div>
+                            <div class="form-group-outline">
+                                <label>Status</label>
+                                <select class="input-outline bg-gray-mock">
+                                    <option>Ativo</option>
+                                    <option>Desligado</option>
+                                    <option>Afastado</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="divider-line mt-3"></div>
+
+                <div class="form-row-outline mt-3">
+                    <div class="form-group-outline">
+                        <label>E-mail</label>
+                        <input type="text" class="input-outline bg-gray-mock" placeholder="">
+                    </div>
+                    <div class="form-group-outline">
+                        <label>Telefone</label>
+                        <input type="text" class="input-outline bg-gray-mock text-center" placeholder="00 0000-0000">
+                    </div>
+                </div>
+
+                <div class="divider-line mt-3"></div>
+
+                <div class="form-row-outline mt-3">
+                    <div class="form-group-outline">
+                        <label class="text-primary-md">Turno:</label>
+                        <select class="input-outline bg-gray-mock">
+                            <option></option>
+                        </select>
+                    </div>
+                    <div class="form-group-outline">
+                        <label class="text-primary-md">Salário Base:</label>
+                        <input type="text" class="input-outline bg-gray-mock" placeholder="R$ 2.300,00">
+                    </div>
+                </div>
+
+                <div class="form-row-outline mt-3">
+                    <div class="form-group-outline">
+                        <label>Cargo</label>
+                        <select class="input-outline bg-gray-mock">
+                            <option></option>
+                        </select>
+                    </div>
+                    <div class="form-group-outline">
+                        <label>Escala</label>
+                        <select class="input-outline bg-gray-mock">
+                            <option></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ABA FINANCEIRO -->
+            <div id="tab-financeiro" class="tab-content" style="display: none;">
+                <label class="text-primary-lg" style="margin-bottom: 20px; display: block;">Dados bancários</label>
+
+                <div class="form-row-outline">
+                    <div class="form-group-outline">
+                        <label>Instituição financeira</label>
+                        <input type="text" class="input-outline bg-gray-mock">
+                    </div>
+                    <div class="form-group-outline">
+                        <label>Conta</label>
+                        <input type="text" class="input-outline bg-gray-mock" placeholder="00000-0">
+                    </div>
+                </div>
+
+                <div class="form-row-outline mt-3">
+                    <div class="form-group-outline">
+                        <label>Tipo conta</label>
+                        <select class="input-outline bg-gray-mock">
+                            <option>Conta corrente</option>
+                        </select>
+                    </div>
+                    <div class="form-group-outline">
+                        <label>Agencia</label>
+                        <input type="text" class="input-outline bg-gray-mock" placeholder="0000">
+                    </div>
+                </div>
+
+                <div class="financeiro-table mt-4">
+                    <div class="financeiro-table-header">
+                        <div>Titulo</div>
+                        <div>mês</div>
+                        <div>Valor</div>
+                        <div>Status</div>
+                    </div>
+                    <div class="financeiro-table-row">
+                        <div>pagamento2026/1</div>
+                        <div>Janeiro</div>
+                        <div>R$ 1.800,00</div>
+                        <div><span class="badge-status-pago">Pago</span></div>
+                    </div>
+                    <div class="financeiro-table-row">
+                        <div>pagamento2026/1</div>
+                        <div>Fevereiro</div>
+                        <div>R$ 1.800,00</div>
+                        <div><span class="badge-status-atrasado">Atrasado</span></div>
+                    </div>
+                    <div class="financeiro-table-row">
+                        <div>pagamento2026/1</div>
+                        <div>Março</div>
+                        <div>R$ 1.800,00</div>
+                        <div><span class="badge-status-aberto">Aberto</span></div>
+                    </div>
+                    <div class="financeiro-table-row">
+                        <div>pagamento2026/1</div>
+                        <div>Abril</div>
+                        <div>R$ 1.800,00</div>
+                        <div><span class="badge-status-aberto">Aberto</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ABA REGISTRO -->
+            <div id="tab-registro" class="tab-content" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <label class="text-primary-lg">Registro de faltas ou horas extras:</label>
+                </div>
+
+                <div class="registro-actions-row"
+                    style="display: flex; gap: 15px; margin-bottom: 40px; align-items: center;">
+                    <select class="input-outline bg-gray-mock" style="flex: 2;">
+                        <option>Selecione um motivo...</option>
+                    </select>
+                    <input type="text" class="input-outline bg-gray-mock" placeholder="00/00/0000" style="flex: 1;">
+                    <button class="btn-filled-small" onclick="abrirModalRegistro()">adicionar</button>
+                </div>
+
+                <div class="financeiro-table mt-4">
+                    <div class="financeiro-table-header">
+                        <div>Motivo <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <line x1="4" y1="6" x2="20" y2="6"></line>
+                                <line x1="8" y1="12" x2="16" y2="12"></line>
+                                <line x1="12" y1="18" x2="12" y2="18"></line>
+                            </svg></div>
+                        <div>detalhes</div>
+                        <div>data <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <line x1="4" y1="6" x2="20" y2="6"></line>
+                                <line x1="8" y1="12" x2="16" y2="12"></line>
+                                <line x1="12" y1="18" x2="12" y2="18"></line>
+                            </svg></div>
+                    </div>
+                    <div class="financeiro-table-row">
+                        <div style="color: var(--primary-color);">falta</div>
+                        <div>Motivos de saúde</div>
+                        <div>07/08/2026</div>
+                    </div>
+                    <div class="financeiro-table-row">
+                        <div style="color: var(--primary-color);">falta</div>
+                        <div>Atestado</div>
+                        <div>12/01/2026</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="drawer-action-buttons">
+            <button class="drawer-btn-cancel" onclick="fecharDrawer()">Cancelar</button>
+            <button class="drawer-btn-confirm" onclick="salvarDrawer()">Confirmar</button>
+        </div>
+
+    </div>
+</div>
+
+<!-- Modal Novo Registro -->
+<div class="modal-overlay" id="modal-registro" style="display: none;">
+    <div class="modal-box">
+        <button class="modal-close" onclick="fecharModalRegistro()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+
+        <h3 class="text-primary-lg" style="margin-bottom: 25px;">Registro de faltas ou horas extras:</h3>
+
+        <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+            <select class="input-outline bg-gray-mock" style="flex: 2;">
+                <option></option>
+            </select>
+            <input type="text" class="input-outline bg-gray-mock" placeholder="00/00/0000" style="flex: 1;">
+        </div>
+
+        <div class="form-group-outline">
+            <label class="text-primary-md">Observação:</label>
+            <textarea class="textarea-outline bg-gray-mock" rows="6"></textarea>
+        </div>
+
+        <div class="drawer-action-buttons"
+            style="border: none; padding: 25px 0 0 0; justify-content: center; gap: 20px;">
+            <button class="drawer-btn-cancel" onclick="fecharModalRegistro()">Cancelar</button>
+            <button class="drawer-btn-confirm"
+                style="background-color: var(--primary-color); border: none; color: var(--white); border-radius: 20px; padding: 10px 25px; font-weight: 600; cursor: pointer;">adicionar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let isAddingNew = false;
+    let currentRow = null;
+
+    function abrirDrawer(isNew = false, el = null) {
+        isAddingNew = isNew;
+        currentRow = el;
+
+        const layout = document.getElementById('funcionarios-layout');
+        const drawer = document.getElementById('side-drawer');
+        const inputNome = document.getElementById('drawer-input-nome');
+
+        // Reset inputs
+        if (inputNome) inputNome.value = '';
+
+        if (!isNew && el) {
+            const colNome = el.querySelector('.col-nome');
+            if (colNome) {
+                const nameText = colNome.innerText.trim();
+                if (inputNome) inputNome.value = nameText;
+            }
+        }
+
+        // Return do Tab do Perfil como default ao abrir
+        const btnPerfil = document.querySelector('.drawer-tabs .tab-btn:first-child');
+        if (btnPerfil) switchTab('tab-perfil', btnPerfil);
+
+        layout.classList.add('drawer-open');
+        drawer.style.display = 'flex';
+    }
+
+    function fecharDrawer() {
+        const layout = document.getElementById('funcionarios-layout');
+        const drawer = document.getElementById('side-drawer');
+        layout.classList.remove('drawer-open');
+        drawer.style.display = 'none';
+        isAddingNew = false;
+        currentRow = null;
+    }
+
+    function salvarDrawer() {
+        const inputNome = document.getElementById('drawer-input-nome');
+        const nomeValue = inputNome ? inputNome.value.trim() : '';
+
+        if (!nomeValue) {
+            alert('Por favor, preencha o Nome antes de confirmar.');
+            return;
+        }
+
+        if (isAddingNew) {
+            const listBody = document.querySelector('.list-body');
+
+            const tr = document.createElement('div');
+            tr.className = 'list-item-row';
+            tr.onclick = function () { abrirDrawer(false, this); };
+            tr.innerHTML = `
+                <div class="col-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                </div>
+                <div class="col-nome align-flex">
+                    <div class="avatar-circle"></div> ${nomeValue}
+                </div>
+                <div class="col-cargo">Novo Cargo</div>
+                <div class="col-idade">30</div>
+                <div class="col-tel">(00) 0000-0000</div>
+                <div class="col-status"><span class="badge-status status-ativo">Ativo</span></div>
+                <div class="col-data">01-01-2026</div>
+            `;
+            listBody.appendChild(tr);
+        } else if (currentRow) {
+            const colNome = currentRow.querySelector('.col-nome');
+            if (colNome) {
+                colNome.innerHTML = `<div class="avatar-circle"></div> ${nomeValue}`;
+            }
+        }
+
+        fecharDrawer();
+    }
+
+    function switchTab(tabId, btnElement) {
+        document.querySelectorAll('.drawer-tabs .tab-btn').forEach(btn => btn.classList.remove('active'));
+        btnElement.classList.add('active');
+
+        document.querySelectorAll('.drawer-content-pane .tab-content').forEach(tab => {
+            tab.style.display = 'none';
+            tab.classList.remove('active');
+        });
+
+        const target = document.getElementById(tabId);
+        target.style.display = 'block';
+        target.classList.add('active');
+    }
+
+    window.sortDir = 'asc';
+    function sortRows(columnId) {
+        const listBody = document.querySelector('.list-body');
+        if (!listBody) return;
+
+        let rows = Array.from(listBody.children);
+
+        window.sortDir = window.sortDir === 'asc' ? 'desc' : 'asc';
+        const dir = window.sortDir === 'asc' ? 1 : -1;
+
+        rows.sort((a, b) => {
+            let valA = a.querySelector('.col-' + columnId).innerText.trim();
+            let valB = b.querySelector('.col-' + columnId).innerText.trim();
+
+            if (columnId === 'idade') {
+                valA = parseInt(valA, 10);
+                valB = parseInt(valB, 10);
+            } else if (columnId === 'data') {
+                let partsA = valA.split('-');
+                let partsB = valB.split('-');
+                if (partsA.length === 3) valA = partsA[2] + partsA[1] + partsA[0];
+                if (partsB.length === 3) valB = partsB[2] + partsB[1] + partsB[0];
+            }
+
+            if (valA > valB) return dir;
+            if (valA < valB) return -dir;
+            return 0;
+        });
+
+        listBody.innerHTML = '';
+        rows.forEach(r => listBody.appendChild(r));
+    }
+
+    function abrirModalRegistro() {
+        document.getElementById('modal-registro').style.display = 'flex';
+    }
+
+    function fecharModalRegistro() {
+        document.getElementById('modal-registro').style.display = 'none';
+    }
+</script>
+{% endblock %}

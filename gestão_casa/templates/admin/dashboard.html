@@ -1,58 +1,109 @@
-<!DOCTYPE html>
-<html lang="pt-PT">
+{% extends "admin/admin_base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Admin - CRM Casa de Repouso</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
+{% block title %}Dashboard - CRM Casa de Repouso{% endblock %}
 
-<body>
-    <header>
-        <div class="container">
-            <h1>Painel de Gestão - Casa de Repouso</h1>
+{% block content %}
+<div class="dash-grid">
+    <!-- Total de Residentes Card -->
+    <div class="dash-card">
+        <div class="dash-card-header">
+            <h3 class="dash-card-title">Total de residentes</h3>
+            <div class="dash-card-header-actions">
+                <span class="badge-mensal">Mensal</span>
+            </div>
         </div>
-    </header>
+        <div class="dash-card-value">
+            35 <span class="dash-card-diff">▲ 3</span>
+        </div>
+        <button class="dash-card-action">Novo Residente</button>
+    </div>
 
-    <nav class="admin-nav">
-        <ul>
-            <li><a href="/admin">Dashboard</a></li>
-            <li><a href="/admin/leads">Leads (Interessados)</a></li>
-            <li><a href="/admin/residentes">Residentes</a></li>
-            <li><a href="/admin/funcionarios">Funcionários</a></li>
-            <li><a href="/admin/financeiro">Financeiro</a></li>
+    <!-- Total de Leads Card -->
+    <div class="dash-card">
+        <div class="dash-card-header">
+            <h3 class="dash-card-title">Total de Leads</h3>
+            <div class="dash-card-header-actions">
+                <span class="badge-mensal">Mensal</span>
+                <span class="icon-expand">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 3 21 3 21 9"></polyline>
+                        <polyline points="9 21 3 21 3 15"></polyline>
+                        <line x1="21" y1="3" x2="14" y2="10"></line>
+                        <line x1="3" y1="21" x2="10" y2="14"></line>
+                    </svg>
+                </span>
+            </div>
+        </div>
+        <div class="dash-card-value">
+            23 <span class="dash-card-diff">▲ 3</span>
+        </div>
+        <button class="dash-card-action">Novo lead</button>
+    </div>
+</div>
+
+<div class="dash-grid-row-2">
+    <!-- Saldo do Mês -->
+    <div class="dash-card" style="padding-bottom: 40px;">
+        <div class="dash-card-header">
+            <h3 class="dash-card-title">Saldo do mês</h3>
+            <span class="icon-expand">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <polyline points="9 21 3 21 3 15"></polyline>
+                    <line x1="21" y1="3" x2="14" y2="10"></line>
+                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                </svg>
+            </span>
+        </div>
+        <div class="dash-card-value money">
+            R$ 12.000,00
+        </div>
+
+        <div class="balance-bars">
+            <div class="balance-label-row">
+                <span>receitas</span>
+                <span>Despesas</span>
+            </div>
+            <div class="balance-bar-bg">
+                <div class="bar-receita"></div>
+                <div class="bar-despesa"></div>
+            </div>
+        </div>
+
+        <div class="balance-categories">
+            <div class="cat-item">
+                <div class="cat-bullet"></div> mensalidades
+            </div>
+            <div class="cat-item">
+                <div class="cat-bullet"></div> Salarios
+            </div>
+            <div class="cat-item">
+                <div class="cat-bullet"></div> Internet
+            </div>
+        </div>
+    </div>
+
+    <!-- Agenda -->
+    <div class="dash-card">
+        <h3 class="agenda-title">Quinta-feira</h3>
+        <div class="agenda-date">19</div>
+
+        <ul class="agenda-list">
+            <li class="agenda-item">
+                <span class="time">15h</span>
+                <span class="event">visitas</span>
+            </li>
+            <li class="agenda-item">
+                <span class="time">17h</span>
+                <span class="event">visitas</span>
+            </li>
+            <li class="agenda-item">
+                <span class="time">18h</span>
+                <span class="event">visitas</span>
+            </li>
         </ul>
-    </nav>
-
-    <main class="container">
-        <h2>Resumo do Sistema</h2>
-
-        <div class="dashboard-cards">
-            <div class="card">
-                <h3>Novos Leads</h3>
-                <div class="number">{{ resumo.leads }}</div>
-            </div>
-
-            <div class="card" style="border-top-color: #2ecc71;">
-                <h3>Residentes Ativos</h3>
-                <div class="number">{{ resumo.residentes }}</div>
-            </div>
-
-            <div class="card" style="border-top-color: #f39c12;">
-                <h3>Funcionários</h3>
-                <div class="number">{{ resumo.funcionarios }}</div>
-            </div>
-        </div>
-
-        <div class="bg-light">
-            <h3>Ações Rápidas</h3>
-            <p>Utilize o menu de navegação acima para acessar as áreas detalhadas do sistema. Na seção de residentes,
-                você pode exportar relatórios para Excel.</p>
-            <br>
-            <a href="/admin/exportar-excel" class="btn btn-secondary">💾 Exportar Relatório de Residentes (Excel)</a>
-        </div>
-    </main>
-</body>
-
-</html>
+    </div>
+</div>
+{% endblock %}

@@ -42,6 +42,10 @@ def financeiro():
     transacoes = list(db.financeiro.find().sort("data", -1))
     return render_template('admin/financeiro.html', transacoes=transacoes)
 
+@admin_bp.route('/agenda')
+def agenda():
+    return render_template('admin/agenda.html')
+
 @admin_bp.route('/exportar-excel')
 def exportar_excel():
     """Gera e faz o download direto do Excel pela memória Buffer."""
@@ -58,3 +62,7 @@ def exportar_excel():
         
     output.seek(0)
     return send_file(output, download_name="relatorio_residentes.xlsx", as_attachment=True)
+
+@admin_bp.route('/configuracoes')
+def configuracoes():
+    return render_template('admin/configuracoes.html')

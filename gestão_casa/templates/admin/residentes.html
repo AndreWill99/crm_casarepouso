@@ -1,63 +1,433 @@
-<!DOCTYPE html>
-<html lang="pt-PT">
+{% extends "admin/admin_base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Residentes - CRM Casa de Repouso</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
+{% block title %}Residentes - CRM Casa de Repouso{% endblock %}
 
-<body>
-    <header>
-        <div class="container">
-            <h1>Gestão de Residentes</h1>
+{% block topbar_actions %}
+<div class="search-filter-group"
+    style="position: absolute; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; align-items: center;">
+    <div class="topbar-search-wrapper">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" class="topbar-search-input" placeholder="pesquisar">
+    </div>
+
+    <button class="topbar-btn-filter">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="4" y1="6" x2="20" y2="6"></line>
+            <line x1="7" y1="12" x2="17" y2="12"></line>
+            <line x1="10" y1="18" x2="14" y2="18"></line>
+        </svg>
+    </button>
+</div>
+
+<button class="topbar-btn-fill">
+    Exportar
+</button>
+
+<button class="topbar-btn-outline" onclick="abrirDrawer(true)">
+    + Adicionar
+</button>
+{% endblock %}
+
+{% block content %}
+<div class="master-detail-layout" id="residentes-layout">
+    <!-- Painel Esquerdo: LISTA -->
+    <div class="master-list">
+        <div class="list-header-row">
+            <div class="col-icon"></div>
+            <div class="col-nome" style="cursor: pointer;" onclick="sortRows('nome')">Nome <svg width="14" height="14"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="8" y1="6" x2="21" y2="6"></line>
+                    <line x1="8" y1="12" x2="21" y2="12"></line>
+                    <line x1="8" y1="18" x2="21" y2="18"></line>
+                    <line x1="3" y1="6" x2="3" y2="6"></line>
+                    <line x1="3" y1="12" x2="3" y2="12"></line>
+                    <line x1="3" y1="18" x2="3" y2="18"></line>
+                </svg></div>
+            <div class="col-grau" style="cursor: pointer;" onclick="sortRows('grau')">Grau <svg width="14" height="14"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="8" y1="6" x2="21" y2="6"></line>
+                    <line x1="8" y1="12" x2="21" y2="12"></line>
+                    <line x1="8" y1="18" x2="21" y2="18"></line>
+                    <line x1="3" y1="6" x2="3" y2="6"></line>
+                    <line x1="3" y1="12" x2="3" y2="12"></line>
+                    <line x1="3" y1="18" x2="3" y2="18"></line>
+                </svg></div>
+            <div class="col-idade" style="cursor: pointer;" onclick="sortRows('idade')">Idade <svg width="14"
+                    height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="8" y1="6" x2="21" y2="6"></line>
+                    <line x1="8" y1="12" x2="21" y2="12"></line>
+                    <line x1="8" y1="18" x2="21" y2="18"></line>
+                    <line x1="3" y1="6" x2="3" y2="6"></line>
+                    <line x1="3" y1="12" x2="3" y2="12"></line>
+                    <line x1="3" y1="18" x2="3" y2="18"></line>
+                </svg></div>
+            <div class="col-tel" style="cursor: pointer;" onclick="sortRows('tel')">Tel. responsável <svg width="14"
+                    height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="8" y1="6" x2="21" y2="6"></line>
+                    <line x1="8" y1="12" x2="21" y2="12"></line>
+                    <line x1="8" y1="18" x2="21" y2="18"></line>
+                    <line x1="3" y1="6" x2="3" y2="6"></line>
+                    <line x1="3" y1="12" x2="3" y2="12"></line>
+                    <line x1="3" y1="18" x2="3" y2="18"></line>
+                </svg></div>
+            <div class="col-data" style="cursor: pointer;" onclick="sortRows('data')">data entrada <svg width="14"
+                    height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="8" y1="6" x2="21" y2="6"></line>
+                    <line x1="8" y1="12" x2="21" y2="12"></line>
+                    <line x1="8" y1="18" x2="21" y2="18"></line>
+                    <line x1="3" y1="6" x2="3" y2="6"></line>
+                    <line x1="3" y1="12" x2="3" y2="12"></line>
+                    <line x1="3" y1="18" x2="3" y2="18"></line>
+                </svg></div>
         </div>
-    </header>
 
-    <nav class="admin-nav">
-        <ul>
-            <li><a href="/admin">Dashboard</a></li>
-            <li><a href="/admin/leads">Leads (Interessados)</a></li>
-            <li><a href="/admin/residentes">Residentes</a></li>
-            <li><a href="/admin/funcionarios">Funcionários</a></li>
-            <li><a href="/admin/financeiro">Financeiro</a></li>
-        </ul>
-    </nav>
+        <!-- Linhas Mock -->
+        <div class="list-body">
+            <div class="list-item-row" onclick="abrirDrawer(false, this)">
+                <div class="col-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 20h9"></path>
+                        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                    </svg>
+                </div>
+                <div class="col-nome align-flex">
+                    <div class="avatar-circle"></div> Chance Vetrovs
+                </div>
+                <div class="col-grau align-flex">Grau 1 <span class="dot-grau bg-g1"></span></div>
+                <div class="col-idade">87</div>
+                <div class="col-tel">(00) 0000-0000</div>
+                <div class="col-data">02-04-2025</div>
+            </div>
 
-    <main class="container">
-        <h2>Residentes Atuais</h2>
+            <div class="list-item-row" onclick="abrirDrawer(false, this)">
+                <div class="col-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 20h9"></path>
+                        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                    </svg>
+                </div>
+                <div class="col-nome align-flex">
+                    <div class="avatar-circle"></div> Emery Aminoff
+                </div>
+                <div class="col-grau align-flex">Grau 1 <span class="dot-grau bg-g1"></span></div>
+                <div class="col-idade">82</div>
+                <div class="col-tel">(00) 0000-0000</div>
+                <div class="col-data">05-06-2025</div>
+            </div>
 
-        {% if residentes %}
-        <table>
-            <thead>
-                <tr>
-                    <th>Nome</th>
-                    <th>Data Admissão</th>
-                    <th>Grau</th>
-                    <th>Status Saúde</th>
-                    <th>Responsável</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for res in residentes %}
-                <tr>
-                    <td>{{ res.nome }}</td>
-                    <td>{{ res.data_admissao.strftime('%d/%m/%Y') if res.data_admissao else 'N/A' }}</td>
-                    <td>Grau {{ res.grau }}</td>
-                    <td>{{ res.status_saude }}</td>
-                    <td>{{ res.responsavel_contato }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        {% else %}
-        <p>Nenhum residente cadastrado.</p>
-        {% endif %}
+            <div class="list-item-row" onclick="abrirDrawer(false, this)">
+                <div class="col-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 20h9"></path>
+                        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                    </svg>
+                </div>
+                <div class="col-nome align-flex">
+                    <div class="avatar-circle"></div> Ashlynn Schleifer
+                </div>
+                <div class="col-grau align-flex">Grau 2 <span class="dot-grau bg-g2"></span></div>
+                <div class="col-idade">89</div>
+                <div class="col-tel">(00) 0000-0000</div>
+                <div class="col-data">11-06-2022</div>
+            </div>
 
-        <br>
-        <a href="/admin/exportar-excel" class="btn btn-secondary">💾 Exportar Relatório de Residentes (Excel)</a>
-    </main>
-</body>
+            <div class="list-item-row" onclick="abrirDrawer(false, this)">
+                <div class="col-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 20h9"></path>
+                        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                    </svg>
+                </div>
+                <div class="col-nome align-flex">
+                    <div class="avatar-circle"></div> Leo Press
+                </div>
+                <div class="col-grau align-flex">Grau 3 <span class="dot-grau bg-g3"></span></div>
+                <div class="col-idade">92</div>
+                <div class="col-tel">(00) 0000-0000</div>
+                <div class="col-data">23-10-2024</div>
+            </div>
+        </div>
+    </div>
 
-</html>
+    <!-- Painel Direito: DRAWER -->
+    <div class="detail-drawer" id="side-drawer" style="display: none;">
+
+        <!-- Drawer Tabs -->
+        <div class="drawer-tabs">
+            <button class="tab-btn active" onclick="switchTab('tab-perfil', this)">Perfil</button>
+            <button class="tab-btn" onclick="switchTab('tab-incidentes', this)">Incidentes</button>
+        </div>
+
+        <div class="drawer-content-pane">
+            <!-- ABA PERFIL -->
+            <div id="tab-perfil" class="tab-content active">
+                <div class="perfil-header-grid">
+                    <div class="perfil-avatar-col">
+                        <div class="avatar-large"></div>
+                    </div>
+                    <div class="perfil-fields-col">
+                        <div class="form-group-outline">
+                            <label>Nome</label>
+                            <input type="text" id="drawer-input-nome" class="input-outline">
+                        </div>
+                        <div class="form-row-outline">
+                            <div class="form-group-outline">
+                                <label>Data de nascimento</label>
+                                <input type="text" class="input-outline" placeholder="00/00/0000">
+                            </div>
+                            <div class="form-group-outline">
+                                <label>Data de entrada</label>
+                                <input type="text" class="input-outline" placeholder="00/00/0000">
+                            </div>
+                        </div>
+                        <div class="form-row-outline">
+                            <div class="form-group-outline">
+                                <label>Quarto</label>
+                                <select class="input-outline">
+                                    <option>Quarto - 1</option>
+                                </select>
+                            </div>
+                            <div class="form-group-outline">
+                                <label>Status</label>
+                                <select class="input-outline">
+                                    <option>Residente</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row-outline mt-3">
+                    <div class="form-group-outline">
+                        <label>Responsável:</label>
+                        <input type="text" class="input-outline bg-gray-mock" placeholder="">
+                    </div>
+                    <div class="form-group-outline">
+                        <label>Telefone</label>
+                        <input type="text" class="input-outline bg-gray-mock text-center" placeholder="00 0000-0000">
+                    </div>
+                </div>
+
+                <div class="form-row-outline mt-4">
+                    <div class="form-group-outline">
+                        <label class="text-primary-md">Grau patológico:</label>
+                        <select class="input-outline bg-gray-mock">
+                            <option></option>
+                        </select>
+                        <p class="field-hint">Grau 1 - independente, apresentando autonomia funcional para as atividades
+                            da vida diária</p>
+                    </div>
+                    <div class="form-group-outline">
+                        <label class="text-primary-md">Alergias:</label>
+                        <select class="input-outline bg-gray-mock">
+                            <option></option>
+                        </select>
+                        <div class="tags-container">
+                            <span class="tag-pill">× Dermatite atópica</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ABA INCIDENTES -->
+            <div id="tab-incidentes" class="tab-content" style="display: none;">
+                <div class="incident-add-form">
+                    <label class="text-primary-lg">adicionar incidente:</label>
+                    <textarea class="textarea-outline" rows="4"></textarea>
+
+                    <div class="incident-actions-row">
+                        <div class="form-group-outline inline-field">
+                            <label class="mr-2">Data:</label>
+                            <input type="text" class="input-outline" placeholder="00/00/0000" style="width: 140px;">
+                        </div>
+                        <button class="btn-severity outline-critico">Crítico</button>
+                        <button class="btn-severity outline-atencao">Atenção</button>
+                        <button class="btn-filled-small">adicionar</button>
+                    </div>
+                </div>
+
+                <div class="incident-history">
+                    <div class="incident-history-header">
+                        <span class="text-primary-md">Incidentes registrados:</span>
+                        <span class="filter-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2">
+                                <line x1="4" y1="6" x2="20" y2="6"></line>
+                                <line x1="8" y1="12" x2="16" y2="12"></line>
+                                <line x1="10" y1="18" x2="14" y2="18"></line>
+                            </svg> Mês</span>
+                    </div>
+
+                    <!-- Cards de Incidente -->
+                    <div class="incident-card">
+                        <div class="incident-card-top">
+                            <span class="data-text">00/00/0000</span>
+                            <span class="badge-atencao"><span class="dot-atencao"></span> Atenção</span>
+                        </div>
+                        <p class="incident-desc">Lorem ipsum dolor sit amet consectetur. Morbi enim orci praesent cursus
+                            vitae egestas sem. Varius pulvinar id at ullamcorper dui volutpat turpis.</p>
+                    </div>
+
+                    <div class="incident-card">
+                        <div class="incident-card-top">
+                            <span class="data-text">00/00/0000</span>
+                            <span class="badge-atencao"><span class="dot-atencao"></span> Atenção</span>
+                        </div>
+                        <p class="incident-desc">Lorem ipsum dolor sit amet consectetur. Morbi enim orci praesent cursus
+                            vitae egestas sem. Varius pulvinar id at ullamcorper dui volutpat turpis.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="drawer-action-buttons">
+            <button class="drawer-btn-cancel" onclick="fecharDrawer()">Cancelar</button>
+            <button class="drawer-btn-confirm" onclick="salvarDrawer()">Confirmar</button>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    let isAddingNew = false;
+    let currentRow = null;
+
+    function abrirDrawer(isNew = false, el = null) {
+        isAddingNew = isNew;
+        currentRow = el;
+
+        const layout = document.getElementById('residentes-layout');
+        const drawer = document.getElementById('side-drawer');
+        const inputNome = document.getElementById('drawer-input-nome');
+
+        // Reset inputs
+        if (inputNome) inputNome.value = '';
+
+        if (!isNew && el) {
+            const colNome = el.querySelector('.col-nome');
+            if (colNome) {
+                const nameText = colNome.innerText.trim();
+                if (inputNome) inputNome.value = nameText;
+            }
+        }
+
+        // Return do Tab do Perfil como default ao abrir
+        const btnPerfil = document.querySelector('.drawer-tabs .tab-btn:first-child');
+        if (btnPerfil) switchTab('tab-perfil', btnPerfil);
+
+        layout.classList.add('drawer-open');
+        drawer.style.display = 'flex';
+    }
+
+    function fecharDrawer() {
+        const layout = document.getElementById('residentes-layout');
+        const drawer = document.getElementById('side-drawer');
+        layout.classList.remove('drawer-open');
+        drawer.style.display = 'none';
+        isAddingNew = false;
+        currentRow = null;
+    }
+
+    function salvarDrawer() {
+        const inputNome = document.getElementById('drawer-input-nome');
+        const nomeValue = inputNome ? inputNome.value.trim() : '';
+
+        if (!nomeValue) {
+            alert('Por favor, preencha o Nome antes de confirmar.');
+            return;
+        }
+
+        if (isAddingNew) {
+            // Criar uma nova linha HTML mocada na tabela
+            const listBody = document.querySelector('.list-body');
+
+            const grades = [
+                { grau: 'Grau 1', bg: 'bg-g1' },
+                { grau: 'Grau 2', bg: 'bg-g2' },
+                { grau: 'Grau 3', bg: 'bg-g3' }
+            ];
+            const rd = grades[Math.floor(Math.random() * grades.length)];
+            const idMock = Math.floor(Math.random() * 20) + 70;
+            const dataHoje = new Date().toLocaleDateString('pt-BR').replace(/\//g, '-');
+
+            const tr = document.createElement('div');
+            tr.className = 'list-item-row';
+            tr.onclick = function () { abrirDrawer(false, this); };
+            tr.innerHTML = `
+                <div class="col-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                </div>
+                <div class="col-nome align-flex">
+                    <div class="avatar-circle"></div> ${nomeValue}
+                </div>
+                <div class="col-grau align-flex">${rd.grau} <span class="dot-grau ${rd.bg}"></span></div>
+                <div class="col-idade">${idMock}</div>
+                <div class="col-tel">(00) 0000-0000</div>
+                <div class="col-data">${dataHoje}</div>
+            `;
+            listBody.appendChild(tr);
+        } else if (currentRow) {
+            // Atualizar o nome do residente existente na lista
+            const colNome = currentRow.querySelector('.col-nome');
+            if (colNome) {
+                // Mantemos o span ou avatar inside the div 
+                colNome.innerHTML = `<div class="avatar-circle"></div> ${nomeValue}`;
+            }
+        }
+
+        fecharDrawer();
+    }
+
+    function switchTab(tabId, btnElement) {
+        document.querySelectorAll('.drawer-tabs .tab-btn').forEach(btn => btn.classList.remove('active'));
+        btnElement.classList.add('active');
+
+        document.querySelectorAll('.drawer-content-pane .tab-content').forEach(tab => {
+            tab.style.display = 'none';
+            tab.classList.remove('active');
+        });
+
+        const target = document.getElementById(tabId);
+        target.style.display = 'block';
+        target.classList.add('active');
+    }
+
+    window.sortDir = 'asc';
+    function sortRows(columnId) {
+        const listBody = document.querySelector('.list-body');
+        if (!listBody) return;
+
+        let rows = Array.from(listBody.children);
+
+        window.sortDir = window.sortDir === 'asc' ? 'desc' : 'asc';
+        const dir = window.sortDir === 'asc' ? 1 : -1;
+
+        rows.sort((a, b) => {
+            let valA = a.querySelector('.col-' + columnId).innerText.trim();
+            let valB = b.querySelector('.col-' + columnId).innerText.trim();
+
+            if (columnId === 'idade') {
+                valA = parseInt(valA, 10);
+                valB = parseInt(valB, 10);
+            } else if (columnId === 'data') {
+                // Conversão simples dd-mm-yyyy para yyyymmdd garantindo ordem correta
+                let partsA = valA.split('-');
+                let partsB = valB.split('-');
+                if (partsA.length === 3) valA = partsA[2] + partsA[1] + partsA[0];
+                if (partsB.length === 3) valB = partsB[2] + partsB[1] + partsB[0];
+            }
+
+            if (valA > valB) return dir;
+            if (valA < valB) return -dir;
+            return 0;
+        });
+
+        listBody.innerHTML = '';
+        rows.forEach(r => listBody.appendChild(r));
+    }
+</script>
+{% endblock %}

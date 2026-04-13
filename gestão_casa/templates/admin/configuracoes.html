@@ -1,0 +1,335 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}Configurações do Sistema - CRM Casa de Repouso{% endblock %}
+
+{% block topbar_actions %}
+{% endblock %}
+
+{% block content %}
+<div class="config-dashboard">
+    <div class="config-topbar-header" style="margin-bottom: 30px;">
+        <h2 class="agenda-main-title" style="font-size: 1.8rem; color: #7a1515; margin:0; margin-bottom: 8px;">
+            Configurações do Sistema</h2>
+        <span style="font-size: 0.95rem; color: #777;">Personalize as regras, dados e acessos da instituição</span>
+    </div>
+    <div class="config-layout-grid">
+
+        <!-- ================= ESQUERDA ================= -->
+        <div class="config-col-left">
+
+            <!-- 1. Dados da Instituição -->
+            <div class="box-panel shadow-sm mb-4">
+                <h3 class="panel-title text-red" style="display:flex; align-items:center; gap:8px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                    Dados da Instituição
+                </h3>
+
+                <div class="form-group-outline mb-4">
+                    <label class="text-primary-sm text-uppercase">NOME DA INSTITUIÇÃO</label>
+                    <input type="text" class="input-outline bg-gray-mock" value="Casa de Repouso VivaBem">
+                </div>
+                <div class="form-row-outline mb-4">
+                    <div class="form-group-outline">
+                        <label class="text-primary-sm text-uppercase">CNPJ</label>
+                        <input type="text" class="input-outline bg-gray-mock" value="12.345.678/0001-99">
+                    </div>
+                    <div class="form-group-outline">
+                        <label class="text-primary-sm text-uppercase">TELEFONE PRINCIPAL</label>
+                        <input type="text" class="input-outline bg-gray-mock" value="(11) 3456-7890">
+                    </div>
+                </div>
+                <div class="form-group-outline mb-4">
+                    <label class="text-primary-sm text-uppercase">ENDEREÇO</label>
+                    <input type="text" class="input-outline bg-gray-mock"
+                        value="Rua das Flores, 245 — Jardim Primavera, São Paulo - SP">
+                </div>
+                <div class="form-row-outline mb-4">
+                    <div class="form-group-outline">
+                        <label class="text-primary-sm text-uppercase">E-MAIL INSTITUCIONAL</label>
+                        <input type="email" class="input-outline bg-gray-mock" value="contato@vivabem.com.br">
+                    </div>
+                    <div class="form-group-outline">
+                        <label class="text-primary-sm text-uppercase">SITE</label>
+                        <input type="text" class="input-outline bg-gray-mock" value="www.vivabem.com.br">
+                    </div>
+                </div>
+                <div style="display:flex; justify-content:flex-end;">
+                    <button class="drawer-btn-confirm" style="width: auto; padding: 10px 30px;">Salvar Dados</button>
+                </div>
+            </div>
+
+            <!-- 2. Logótipo -->
+            <div class="box-panel shadow-sm mb-4">
+                <h3 class="panel-title text-red" style="display:flex; align-items:center; gap:8px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    Logótipo da Instituição
+                </h3>
+
+                <div class="logo-upload-wrap">
+                    <div class="current-logo-box bg-gray-mock">
+                        🏡
+                    </div>
+                    <div class="logo-dropzone bg-gray-mock">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2274A5" stroke-width="2"
+                            style="margin-bottom:10px;">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        <span class="upload-title">Clique para enviar um novo logótipo</span>
+                        <span class="upload-desc">PNG ou SVG · Recomendado 400x400px · Aparece nos relatórios
+                            PDF/Excel</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Valores Base -->
+            <div class="box-panel shadow-sm">
+                <h3 class="panel-title text-red" style="display:flex; align-items:center; gap:8px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                    </svg>
+                    Valores Base por Grau de Dependência
+                </h3>
+                <p class="config-text-muted">Altere os preços-base aqui e o simulador do site será atualizado
+                    automaticamente.</p>
+
+                <div class="grau-cards-grid">
+                    <!-- G1 -->
+                    <div class="grau-card bg-gray-mock">
+                        <span class="grau-badge-solid bg-red-pale">G1</span>
+                        <span class="grau-title">BAIXA DEPENDÊNCIA</span>
+                        <span class="grau-value text-red text-fw-600" style="font-size: 1.4rem;">R$ 2.800</span>
+                        <input type="text" class="input-outline mini-input" value="R$ 2.800,00">
+                    </div>
+                    <!-- G2 -->
+                    <div class="grau-card bg-gray-mock">
+                        <span class="grau-badge-solid bg-red-pale">G2</span>
+                        <span class="grau-title">MÉDIA DEPENDÊNCIA</span>
+                        <span class="grau-value text-red text-fw-600" style="font-size: 1.4rem;">R$ 4.200</span>
+                        <input type="text" class="input-outline mini-input" value="R$ 4.200,00">
+                    </div>
+                    <!-- G3 -->
+                    <div class="grau-card bg-gray-mock">
+                        <span class="grau-badge-solid bg-red-pale">G3</span>
+                        <span class="grau-title">ALTA DEPENDÊNCIA</span>
+                        <span class="grau-value text-red text-fw-600" style="font-size: 1.4rem;">R$ 6.800</span>
+                        <input type="text" class="input-outline mini-input" value="R$ 6.800,00">
+                    </div>
+                </div>
+
+                <div class="config-warning-msg">
+                    <span style="color:#D35400;">⚠️ Alterar estes valores afeta todos os leads no simulador. A mudança
+                        não é retroativa para contratos já firmados.</span>
+                </div>
+
+                <div style="display:flex; justify-content:flex-end; margin-top:20px;">
+                    <button class="drawer-btn-confirm" style="width: auto; padding: 10px 30px;">Atualizar
+                        Valores</button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ================= DIREITA ================= -->
+        <div class="config-col-right">
+
+            <!-- 4. Gestão de Usuários -->
+            <div class="box-panel shadow-sm mb-4">
+                <h3 class="panel-title text-red" style="display:flex; align-items:center; gap:8px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    Gestão de Usuários
+                </h3>
+
+                <div class="user-list-container">
+                    <!-- User 1 -->
+                    <div class="user-item">
+                        <div class="avatar bg-red text-white" style="width:40px; height:40px;">MR</div>
+                        <div class="user-info">
+                            <span class="u-name">Marcos Ramos</span>
+                            <span class="u-desc">Administrador · Último acesso: hoje</span>
+                        </div>
+                        <div class="u-badges">
+                            <span class="cal-badge bg-pale-green text-dark-green">Admin</span>
+                        </div>
+                        <div class="u-actions">
+                            <button class="btn-config-action"><svg width="14" height="14" viewBox="0 0 24 24"
+                                    fill="none" stroke="#D35400" stroke-width="2">
+                                    <path d="M12 20h9"></path>
+                                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                                </svg></button>
+                        </div>
+                    </div>
+                    <!-- User 2 -->
+                    <div class="user-item">
+                        <div class="avatar bg-purple text-white" style="width:40px; height:40px;">CE</div>
+                        <div class="user-info">
+                            <span class="u-name">Cláudia Enfermeira</span>
+                            <span class="u-desc">Enfermagem · Último acesso: ontem</span>
+                        </div>
+                        <div class="u-badges">
+                            <span class="cal-badge bg-pale-green text-dark-green">Agenda</span>
+                            <span class="cal-badge bg-gray-mock text-dark">Financeiro</span>
+                        </div>
+                        <div class="u-actions">
+                            <button class="btn-config-action"><svg width="14" height="14" viewBox="0 0 24 24"
+                                    fill="none" stroke="#D35400" stroke-width="2">
+                                    <path d="M12 20h9"></path>
+                                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                                </svg></button>
+                            <button class="btn-config-action"><svg width="14" height="14" viewBox="0 0 24 24"
+                                    fill="none" stroke="#777" stroke-width="2">
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path
+                                        d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                                    </path>
+                                </svg></button>
+                        </div>
+                    </div>
+                    <!-- User 3 -->
+                    <div class="user-item">
+                        <div class="avatar bg-blue text-white" style="width:40px; height:40px;">AS</div>
+                        <div class="user-info">
+                            <span class="u-name">Ana Secretária</span>
+                            <span class="u-desc">Recepção · Último acesso: 3 dias atrás</span>
+                        </div>
+                        <div class="u-badges">
+                            <span class="cal-badge bg-pale-green text-dark-green">Residentes</span>
+                            <span class="cal-badge bg-pale-green text-dark-green">Leads</span>
+                            <span class="cal-badge bg-gray-mock text-dark">Financeiro</span>
+                        </div>
+                        <div class="u-actions">
+                            <button class="btn-config-action"><svg width="14" height="14" viewBox="0 0 24 24"
+                                    fill="none" stroke="#D35400" stroke-width="2">
+                                    <path d="M12 20h9"></path>
+                                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                                </svg></button>
+                            <button class="btn-config-action"><svg width="14" height="14" viewBox="0 0 24 24"
+                                    fill="none" stroke="#777" stroke-width="2">
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path
+                                        d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                                    </path>
+                                </svg></button>
+                        </div>
+                    </div>
+                    <!-- User 4 -->
+                    <div class="user-item">
+                        <div class="avatar bg-orange text-white" style="width:40px; height:40px;">JC</div>
+                        <div class="user-info">
+                            <span class="u-name">João Cuidador</span>
+                            <span class="u-desc">Cuidador · Último acesso: 1 semana</span>
+                        </div>
+                        <div class="u-badges">
+                            <span class="cal-badge bg-pale-green text-dark-green">Agenda</span>
+                            <span class="cal-badge bg-gray-mock text-dark">Financeiro</span>
+                            <span class="cal-badge bg-gray-mock text-dark">Leads</span>
+                        </div>
+                        <div class="u-actions">
+                            <button class="btn-config-action"><svg width="14" height="14" viewBox="0 0 24 24"
+                                    fill="none" stroke="#D35400" stroke-width="2">
+                                    <path d="M12 20h9"></path>
+                                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                                </svg></button>
+                            <button class="btn-config-action"><svg width="14" height="14" viewBox="0 0 24 24"
+                                    fill="none" stroke="#777" stroke-width="2">
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path
+                                        d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                                    </path>
+                                </svg></button>
+                        </div>
+                    </div>
+
+                    <button class="btn-outline-action mt-3" style="width: 100%; border-style: dashed;">+ Adicionar Novo
+                        Usuário</button>
+                </div>
+            </div>
+
+            <!-- 5. Permissões -->
+            <div class="box-panel shadow-sm">
+                <h3 class="panel-title text-red"
+                    style="display:flex; align-items:center; justify-content: space-between; gap:8px;">
+                    <span style="display:flex; align-items:center; gap:8px;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        </svg>
+                        Permissões por Módulo
+                    </span>
+                    <select class="input-outline mini-input bg-gray-mock text-dark"
+                        style="width: 180px; font-weight: 600; padding: 6px 10px;">
+                        <option>Marcos Ramos</option>
+                        <option selected>Cláudia Enfermeira</option>
+                        <option>Ana Secretária</option>
+                        <option>João Cuidador</option>
+                    </select>
+                </h3>
+
+                <div class="perms-table">
+                    <div class="perms-header">
+                        <div class="p-mod">Módulo</div>
+                        <div class="p-check text-center">VISUALIZAR</div>
+                        <div class="p-check text-center">EDITAR</div>
+                        <div class="p-check text-center">EXCLUIR</div>
+                    </div>
+
+                    <div class="perms-row">
+                        <div class="p-mod text-fw-600"
+                            style="color: #4a4a4a; display:flex; align-items:center; gap:6px;">📇 Residentes</div>
+                        <div class="p-check text-center text-green fw-bold">✓</div>
+                        <div class="p-check text-center text-green fw-bold">✓</div>
+                        <div class="p-check text-center text-red fw-bold">✕</div>
+                    </div>
+                    <div class="perms-row">
+                        <div class="p-mod text-fw-600"
+                            style="color: #4a4a4a; display:flex; align-items:center; gap:6px;">📅 Agenda</div>
+                        <div class="p-check text-center text-green fw-bold">✓</div>
+                        <div class="p-check text-center text-green fw-bold">✓</div>
+                        <div class="p-check text-center text-green fw-bold">✓</div>
+                    </div>
+                    <div class="perms-row">
+                        <div class="p-mod text-fw-600"
+                            style="color: #b0b0b0; display:flex; align-items:center; gap:6px;">💰 Financeiro</div>
+                        <div class="p-check text-center text-red fw-bold" style="opacity:0.5;">✕</div>
+                        <div class="p-check text-center text-red fw-bold" style="opacity:0.5;">✕</div>
+                        <div class="p-check text-center text-red fw-bold" style="opacity:0.5;">✕</div>
+                    </div>
+                    <div class="perms-row">
+                        <div class="p-mod text-fw-600"
+                            style="color: #b0b0b0; display:flex; align-items:center; gap:6px;">🎯 Gestão de Leads</div>
+                        <div class="p-check text-center text-red fw-bold" style="opacity:0.5;">✕</div>
+                        <div class="p-check text-center text-red fw-bold" style="opacity:0.5;">✕</div>
+                        <div class="p-check text-center text-red fw-bold" style="opacity:0.5;">✕</div>
+                    </div>
+                    <div class="perms-row">
+                        <div class="p-mod text-fw-600"
+                            style="color: #4a4a4a; display:flex; align-items:center; gap:6px;">👥 Equipe</div>
+                        <div class="p-check text-center text-green fw-bold">✓</div>
+                        <div class="p-check text-center text-red fw-bold">✕</div>
+                        <div class="p-check text-center text-red fw-bold">✕</div>
+                    </div>
+                </div>
+
+                <div style="display:flex; justify-content:flex-end; margin-top:20px;">
+                    <button class="drawer-btn-confirm" style="width: auto; padding: 10px 30px;">Salvar
+                        Permissões</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
