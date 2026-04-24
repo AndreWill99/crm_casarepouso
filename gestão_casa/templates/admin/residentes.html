@@ -24,9 +24,10 @@
     </button>
 </div>
 
-<button class="topbar-btn-fill">
+<a href="/admin/export/residentes" class="topbar-btn-fill"
+    style="text-decoration:none; display:flex; align-items:center;">
     Exportar
-</button>
+</a>
 
 <button class="topbar-btn-outline" onclick="abrirDrawer(true)">
     + Adicionar
@@ -87,7 +88,30 @@
         </div>
 
         <!-- Linhas Mock -->
+
         <div class="list-body">
+            {% for res in residentes %}
+            <div class="list-item-row" onclick="abrirDrawer(false, this)">
+                <div class="col-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 20h9"></path>
+                        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                    </svg>
+                </div>
+                <div class="col-nome align-flex">
+                    <div class="avatar-circle"></div> {{ res.nome }}
+                </div>
+                <div class="col-grau align-flex">{{ res.grau_dependencia }} <span
+                        class="dot-grau {% if res.grau_dependencia == 'Grau 1' %}bg-g1{% elif res.grau_dependencia == 'Grau 2' %}bg-g2{% else %}bg-g3{% endif %}"></span>
+                </div>
+                <div class="col-idade">-</div>
+                <div class="col-tel">{{ res.telefone_responsavel or 'Não Informado' }}</div>
+                <div class="col-data">{{ res.data_entrada or '-' }}</div>
+            </div>
+            {% endfor %}
+
+            {% if not residentes %}
+            <!-- Exibindo Mockups de exemplo pois o bando de dados está vazio -->
             <div class="list-item-row" onclick="abrirDrawer(false, this)">
                 <div class="col-icon">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -148,9 +172,11 @@
                 </div>
                 <div class="col-grau align-flex">Grau 3 <span class="dot-grau bg-g3"></span></div>
                 <div class="col-idade">92</div>
+                <div class="col-idade">92</div>
                 <div class="col-tel">(00) 0000-0000</div>
                 <div class="col-data">23-10-2024</div>
             </div>
+            {% endif %}
         </div>
     </div>
 
@@ -178,24 +204,26 @@
                         <div class="form-row-outline">
                             <div class="form-group-outline">
                                 <label>Data de nascimento</label>
-                                <input type="text" class="input-outline" placeholder="00/00/0000">
+                                <input type="date" id="res-nascimento" class="input-outline" required>
                             </div>
                             <div class="form-group-outline">
                                 <label>Data de entrada</label>
-                                <input type="text" class="input-outline" placeholder="00/00/0000">
+                                <input type="date" id="res-entrada" class="input-outline" required>
                             </div>
                         </div>
                         <div class="form-row-outline">
                             <div class="form-group-outline">
                                 <label>Quarto</label>
-                                <select class="input-outline">
+                                <select id="res-quarto" class="input-outline">
                                     <option>Quarto - 1</option>
                                 </select>
                             </div>
                             <div class="form-group-outline">
                                 <label>Status</label>
-                                <select class="input-outline">
+                                <select id="res-status" class="input-outline">
                                     <option>Residente</option>
+                                    <option>Em Adaptação</option>
+                                    <option>Inativo</option>
                                 </select>
                             </div>
                         </div>
@@ -205,30 +233,39 @@
                 <div class="form-row-outline mt-3">
                     <div class="form-group-outline">
                         <label>Responsável:</label>
-                        <input type="text" class="input-outline bg-gray-mock" placeholder="">
+                        <input type="text" id="res-responsavel" class="input-outline bg-gray-mock" placeholder=""
+                            required>
                     </div>
                     <div class="form-group-outline">
                         <label>Telefone</label>
-                        <input type="text" class="input-outline bg-gray-mock text-center" placeholder="00 0000-0000">
+                        <input type="tel" id="res-telefone" class="input-outline bg-gray-mock text-center"
+                            placeholder="(00) 00000-0000" pattern="[0-9/.\-\s\(\)]+">
                     </div>
                 </div>
 
                 <div class="form-row-outline mt-4">
                     <div class="form-group-outline">
                         <label class="text-primary-md">Grau patológico:</label>
-                        <select class="input-outline bg-gray-mock">
-                            <option></option>
+                        <select id="res-grau" class="input-outline bg-gray-mock">
+                            <option>Grau 1</option>
+                            <option>Grau 2</option>
+                            <option>Grau 3</option>
                         </select>
                         <p class="field-hint">Grau 1 - independente, apresentando autonomia funcional para as atividades
                             da vida diária</p>
                     </div>
                     <div class="form-group-outline">
-                        <label class="text-primary-md">Alergias:</label>
-                        <select class="input-outline bg-gray-mock">
-                            <option></option>
-                        </select>
+                        <label class="text-primary-md">Alergias (Aperte Enter):</label>
+                        <input type="text" id="res-alergias" list="list-alergias" class="input-outline bg-gray-mock"
+                            placeholder="Escolha ou digite...">
+                        <datalist id="list-alergias">
+                            <option value="Dermatite atópica">
+                            <option value="Glúten">
+                            <option value="Lactose">
+                            <option value="Frutos do Mar">
+                        </datalist>
                         <div class="tags-container">
-                            <span class="tag-pill">× Dermatite atópica</span>
+                            <!-- Tags dinâmicas aparecem aqui -->
                         </div>
                     </div>
                 </div>
@@ -333,53 +370,52 @@
     }
 
     function salvarDrawer() {
-        const inputNome = document.getElementById('drawer-input-nome');
-        const nomeValue = inputNome ? inputNome.value.trim() : '';
+        const payload = {
+            nome: document.getElementById('drawer-input-nome')?.value || '',
+            nascimento: document.getElementById('res-nascimento')?.value || '',
+            entrada: document.getElementById('res-entrada')?.value || '',
+            quarto: document.getElementById('res-quarto')?.value || '',
+            status: document.getElementById('res-status')?.value || '',
+            responsavel: document.getElementById('res-responsavel')?.value || '',
+            telefone: document.getElementById('res-telefone')?.value || '',
+            grau: document.getElementById('res-grau')?.value || ''
+        };
 
-        if (!nomeValue) {
+        if (!payload.nome) {
             alert('Por favor, preencha o Nome antes de confirmar.');
             return;
         }
 
+        // Se está adicionando um novo
         if (isAddingNew) {
-            // Criar uma nova linha HTML mocada na tabela
-            const listBody = document.querySelector('.list-body');
+            fetch('/admin/api/residentes', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        alert("Residente criado com sucesso na DB!");
+                        window.location.reload();
+                    } else {
+                        alert("Erro: " + data.message);
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert("Erro ao conectar à API.");
+                });
 
-            const grades = [
-                { grau: 'Grau 1', bg: 'bg-g1' },
-                { grau: 'Grau 2', bg: 'bg-g2' },
-                { grau: 'Grau 3', bg: 'bg-g3' }
-            ];
-            const rd = grades[Math.floor(Math.random() * grades.length)];
-            const idMock = Math.floor(Math.random() * 20) + 70;
-            const dataHoje = new Date().toLocaleDateString('pt-BR').replace(/\//g, '-');
-
-            const tr = document.createElement('div');
-            tr.className = 'list-item-row';
-            tr.onclick = function () { abrirDrawer(false, this); };
-            tr.innerHTML = `
-                <div class="col-icon">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-                </div>
-                <div class="col-nome align-flex">
-                    <div class="avatar-circle"></div> ${nomeValue}
-                </div>
-                <div class="col-grau align-flex">${rd.grau} <span class="dot-grau ${rd.bg}"></span></div>
-                <div class="col-idade">${idMock}</div>
-                <div class="col-tel">(00) 0000-0000</div>
-                <div class="col-data">${dataHoje}</div>
-            `;
-            listBody.appendChild(tr);
         } else if (currentRow) {
-            // Atualizar o nome do residente existente na lista
+            // Placeholder temporário para Update
+            alert("A funcionalidade UPDATE via banco ainda será implementada. Registro mock atualizado.");
             const colNome = currentRow.querySelector('.col-nome');
             if (colNome) {
-                // Mantemos o span ou avatar inside the div 
-                colNome.innerHTML = `<div class="avatar-circle"></div> ${nomeValue}`;
+                colNome.innerHTML = `<div class="avatar-circle"></div> ${payload.nome}`;
             }
+            fecharDrawer();
         }
-
-        fecharDrawer();
     }
 
     function switchTab(tabId, btnElement) {
@@ -429,5 +465,55 @@
         listBody.innerHTML = '';
         rows.forEach(r => listBody.appendChild(r));
     }
+
+    // ----------- Lógica: Patologias e Alergias -----------
+    document.addEventListener("DOMContentLoaded", function () {
+        const selectGrau = document.getElementById('res-grau');
+        const hintGrau = document.querySelector('.field-hint');
+
+        if (selectGrau && hintGrau) {
+            selectGrau.addEventListener('change', function () {
+                if (this.value === 'Grau 1') hintGrau.innerText = 'Grau 1 - independente, apresentando autonomia funcional para as atividades da vida diária';
+                else if (this.value === 'Grau 2') hintGrau.innerText = 'Grau 2 - dependência em até três atividades de autocuidado para a vida diária';
+                else if (this.value === 'Grau 3') hintGrau.innerText = 'Grau 3 - dependência que requeira assistência em todas as atividades de autocuidado';
+                else hintGrau.innerText = '';
+            });
+        }
+
+        const selectAlergias = document.getElementById('res-alergias');
+        const containerTags = document.querySelector('.tags-container');
+
+        if (selectAlergias && containerTags) {
+            function addAlergiaTag() {
+                const val = selectAlergias.value.trim();
+                if (!val) return;
+
+                if (val.toLowerCase() === 'nenhuma conhecida') {
+                    containerTags.innerHTML = '';
+                    selectAlergias.value = '';
+                    return;
+                }
+
+                // Evitar duplicações visuais
+                if (!containerTags.innerHTML.includes(val)) {
+                    const spam = document.createElement('span');
+                    spam.className = 'tag-pill';
+                    spam.title = 'Clique no X para remover';
+                    spam.innerHTML = `<span style="font-weight:bold; cursor:pointer;" onclick="this.parentElement.remove()">×</span> ${val}`;
+                    containerTags.appendChild(spam);
+                }
+                selectAlergias.value = ''; // limpa pra próxima
+            }
+
+            selectAlergias.addEventListener('change', addAlergiaTag);
+            selectAlergias.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    addAlergiaTag();
+                }
+            });
+        }
+    });
+
 </script>
 {% endblock %}

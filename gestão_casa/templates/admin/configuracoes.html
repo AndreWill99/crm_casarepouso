@@ -29,35 +29,38 @@
 
                 <div class="form-group-outline mb-4">
                     <label class="text-primary-sm text-uppercase">NOME DA INSTITUIÇÃO</label>
-                    <input type="text" class="input-outline bg-gray-mock" value="Casa de Repouso VivaBem">
+                    <input type="text" id="cfg-nome" class="input-outline bg-gray-mock" value="{{ config.nome }}">
                 </div>
                 <div class="form-row-outline mb-4">
                     <div class="form-group-outline">
                         <label class="text-primary-sm text-uppercase">CNPJ</label>
-                        <input type="text" class="input-outline bg-gray-mock" value="12.345.678/0001-99">
+                        <input type="text" id="cfg-cnpj" class="input-outline bg-gray-mock" value="{{ config.cnpj }}">
                     </div>
                     <div class="form-group-outline">
                         <label class="text-primary-sm text-uppercase">TELEFONE PRINCIPAL</label>
-                        <input type="text" class="input-outline bg-gray-mock" value="(11) 3456-7890">
+                        <input type="text" id="cfg-telefone" class="input-outline bg-gray-mock"
+                            value="{{ config.telefone }}">
                     </div>
                 </div>
                 <div class="form-group-outline mb-4">
                     <label class="text-primary-sm text-uppercase">ENDEREÇO</label>
-                    <input type="text" class="input-outline bg-gray-mock"
-                        value="Rua das Flores, 245 — Jardim Primavera, São Paulo - SP">
+                    <input type="text" id="cfg-endereco" class="input-outline bg-gray-mock"
+                        value="{{ config.endereco }}">
                 </div>
                 <div class="form-row-outline mb-4">
                     <div class="form-group-outline">
                         <label class="text-primary-sm text-uppercase">E-MAIL INSTITUCIONAL</label>
-                        <input type="email" class="input-outline bg-gray-mock" value="contato@vivabem.com.br">
+                        <input type="email" id="cfg-email" class="input-outline bg-gray-mock"
+                            value="{{ config.email }}">
                     </div>
                     <div class="form-group-outline">
                         <label class="text-primary-sm text-uppercase">SITE</label>
-                        <input type="text" class="input-outline bg-gray-mock" value="www.vivabem.com.br">
+                        <input type="text" id="cfg-site" class="input-outline bg-gray-mock" value="{{ config.site }}">
                     </div>
                 </div>
                 <div style="display:flex; justify-content:flex-end;">
-                    <button class="drawer-btn-confirm" style="width: auto; padding: 10px 30px;">Salvar Dados</button>
+                    <button class="drawer-btn-confirm" onclick="salvarConfig()"
+                        style="width: auto; padding: 10px 30px;">Salvar Dados</button>
                 </div>
             </div>
 
@@ -106,22 +109,22 @@
                     <div class="grau-card bg-gray-mock">
                         <span class="grau-badge-solid bg-red-pale">G1</span>
                         <span class="grau-title">BAIXA DEPENDÊNCIA</span>
-                        <span class="grau-value text-red text-fw-600" style="font-size: 1.4rem;">R$ 2.800</span>
-                        <input type="text" class="input-outline mini-input" value="R$ 2.800,00">
+                        <span class="grau-value text-red text-fw-600" style="font-size: 1.4rem;">{{ config.g1 }}</span>
+                        <input type="text" id="cfg-g1" class="input-outline mini-input" value="{{ config.g1 }}">
                     </div>
                     <!-- G2 -->
                     <div class="grau-card bg-gray-mock">
                         <span class="grau-badge-solid bg-red-pale">G2</span>
                         <span class="grau-title">MÉDIA DEPENDÊNCIA</span>
-                        <span class="grau-value text-red text-fw-600" style="font-size: 1.4rem;">R$ 4.200</span>
-                        <input type="text" class="input-outline mini-input" value="R$ 4.200,00">
+                        <span class="grau-value text-red text-fw-600" style="font-size: 1.4rem;">{{ config.g2 }}</span>
+                        <input type="text" id="cfg-g2" class="input-outline mini-input" value="{{ config.g2 }}">
                     </div>
                     <!-- G3 -->
                     <div class="grau-card bg-gray-mock">
                         <span class="grau-badge-solid bg-red-pale">G3</span>
                         <span class="grau-title">ALTA DEPENDÊNCIA</span>
-                        <span class="grau-value text-red text-fw-600" style="font-size: 1.4rem;">R$ 6.800</span>
-                        <input type="text" class="input-outline mini-input" value="R$ 6.800,00">
+                        <span class="grau-value text-red text-fw-600" style="font-size: 1.4rem;">{{ config.g3 }}</span>
+                        <input type="text" id="cfg-g3" class="input-outline mini-input" value="{{ config.g3 }}">
                     </div>
                 </div>
 
@@ -131,7 +134,8 @@
                 </div>
 
                 <div style="display:flex; justify-content:flex-end; margin-top:20px;">
-                    <button class="drawer-btn-confirm" style="width: auto; padding: 10px 30px;">Atualizar
+                    <button class="drawer-btn-confirm" onclick="salvarConfig()"
+                        style="width: auto; padding: 10px 30px;">Atualizar
                         Valores</button>
                 </div>
             </div>
@@ -154,12 +158,15 @@
                 </h3>
 
                 <div class="user-list-container">
-                    <!-- User 1 -->
+                    {% for u in usuarios %}
                     <div class="user-item">
-                        <div class="avatar bg-red text-white" style="width:40px; height:40px;">MR</div>
+                        <div class="avatar bg-{% if loop.index % 2 == 0 %}purple{% else %}red{% endif %} text-white"
+                            style="width:40px; height:40px;">
+                            {{ u.name[:2].upper() if u.name else 'US' }}
+                        </div>
                         <div class="user-info">
-                            <span class="u-name">Marcos Ramos</span>
-                            <span class="u-desc">Administrador · Último acesso: hoje</span>
+                            <span class="u-name">{{ u.name }} ({{ u.username }})</span>
+                            <span class="u-desc">Acesso: {{ u.role | capitalize }}</span>
                         </div>
                         <div class="u-badges">
                             <span class="cal-badge bg-pale-green text-dark-green">Admin</span>
@@ -170,25 +177,6 @@
                                     <path d="M12 20h9"></path>
                                     <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
                                 </svg></button>
-                        </div>
-                    </div>
-                    <!-- User 2 -->
-                    <div class="user-item">
-                        <div class="avatar bg-purple text-white" style="width:40px; height:40px;">CE</div>
-                        <div class="user-info">
-                            <span class="u-name">Cláudia Enfermeira</span>
-                            <span class="u-desc">Enfermagem · Último acesso: ontem</span>
-                        </div>
-                        <div class="u-badges">
-                            <span class="cal-badge bg-pale-green text-dark-green">Agenda</span>
-                            <span class="cal-badge bg-gray-mock text-dark">Financeiro</span>
-                        </div>
-                        <div class="u-actions">
-                            <button class="btn-config-action"><svg width="14" height="14" viewBox="0 0 24 24"
-                                    fill="none" stroke="#D35400" stroke-width="2">
-                                    <path d="M12 20h9"></path>
-                                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
-                                </svg></button>
                             <button class="btn-config-action"><svg width="14" height="14" viewBox="0 0 24 24"
                                     fill="none" stroke="#777" stroke-width="2">
                                     <polyline points="3 6 5 6 21 6"></polyline>
@@ -198,60 +186,7 @@
                                 </svg></button>
                         </div>
                     </div>
-                    <!-- User 3 -->
-                    <div class="user-item">
-                        <div class="avatar bg-blue text-white" style="width:40px; height:40px;">AS</div>
-                        <div class="user-info">
-                            <span class="u-name">Ana Secretária</span>
-                            <span class="u-desc">Recepção · Último acesso: 3 dias atrás</span>
-                        </div>
-                        <div class="u-badges">
-                            <span class="cal-badge bg-pale-green text-dark-green">Residentes</span>
-                            <span class="cal-badge bg-pale-green text-dark-green">Leads</span>
-                            <span class="cal-badge bg-gray-mock text-dark">Financeiro</span>
-                        </div>
-                        <div class="u-actions">
-                            <button class="btn-config-action"><svg width="14" height="14" viewBox="0 0 24 24"
-                                    fill="none" stroke="#D35400" stroke-width="2">
-                                    <path d="M12 20h9"></path>
-                                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
-                                </svg></button>
-                            <button class="btn-config-action"><svg width="14" height="14" viewBox="0 0 24 24"
-                                    fill="none" stroke="#777" stroke-width="2">
-                                    <polyline points="3 6 5 6 21 6"></polyline>
-                                    <path
-                                        d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
-                                    </path>
-                                </svg></button>
-                        </div>
-                    </div>
-                    <!-- User 4 -->
-                    <div class="user-item">
-                        <div class="avatar bg-orange text-white" style="width:40px; height:40px;">JC</div>
-                        <div class="user-info">
-                            <span class="u-name">João Cuidador</span>
-                            <span class="u-desc">Cuidador · Último acesso: 1 semana</span>
-                        </div>
-                        <div class="u-badges">
-                            <span class="cal-badge bg-pale-green text-dark-green">Agenda</span>
-                            <span class="cal-badge bg-gray-mock text-dark">Financeiro</span>
-                            <span class="cal-badge bg-gray-mock text-dark">Leads</span>
-                        </div>
-                        <div class="u-actions">
-                            <button class="btn-config-action"><svg width="14" height="14" viewBox="0 0 24 24"
-                                    fill="none" stroke="#D35400" stroke-width="2">
-                                    <path d="M12 20h9"></path>
-                                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
-                                </svg></button>
-                            <button class="btn-config-action"><svg width="14" height="14" viewBox="0 0 24 24"
-                                    fill="none" stroke="#777" stroke-width="2">
-                                    <polyline points="3 6 5 6 21 6"></polyline>
-                                    <path
-                                        d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
-                                    </path>
-                                </svg></button>
-                        </div>
-                    </div>
+                    {% endfor %}
 
                     <button class="btn-outline-action mt-3" style="width: 100%; border-style: dashed;">+ Adicionar Novo
                         Usuário</button>
@@ -332,4 +267,36 @@
         </div>
     </div>
 </div>
+
+<script>
+    function salvarConfig() {
+        const payload = {
+            nome: document.getElementById('cfg-nome').value,
+            cnpj: document.getElementById('cfg-cnpj').value,
+            telefone: document.getElementById('cfg-telefone').value,
+            endereco: document.getElementById('cfg-endereco').value,
+            email: document.getElementById('cfg-email').value,
+            site: document.getElementById('cfg-site').value,
+            g1: document.getElementById('cfg-g1').value,
+            g2: document.getElementById('cfg-g2').value,
+            g3: document.getElementById('cfg-g3').value
+        };
+
+        fetch('/admin/api/config', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert("Configurações atualizadas globalmente!");
+                    window.location.reload();
+                } else {
+                    alert("Erro: " + data.message);
+                }
+            })
+            .catch(err => alert("Erro ao comunicar com API."));
+    }
+</script>
 {% endblock %}

@@ -24,9 +24,10 @@
     </button>
 </div>
 
-<button class="topbar-btn-fill">
+<a href="/admin/export/financeiro" class="topbar-btn-fill"
+    style="text-decoration:none; display:flex; align-items:center;">
     Exportar
-</button>
+</a>
 
 <button class="topbar-btn-outline" onclick="abrirDrawerTransacao()">
     + Adicionar
@@ -39,15 +40,15 @@
     <div class="fin-cards-grid">
         <div class="fin-card shadow-sm">
             <span class="fin-card-title text-fw-600">Entradas</span>
-            <span class="fin-card-value" style="color: #1e7a36;">R$ 24.560,00</span>
+            <span class="fin-card-value" style="color: #1e7a36;">{{ cards.entradas if cards else 'R$ 0,00' }}</span>
         </div>
         <div class="fin-card shadow-sm">
             <span class="fin-card-title text-fw-600">Despesas</span>
-            <span class="fin-card-value" style="color: #7a1515;">R$ 12.000,00</span>
+            <span class="fin-card-value" style="color: #7a1515;">{{ cards.despesas if cards else 'R$ 0,00' }}</span>
         </div>
         <div class="fin-card shadow-sm">
             <span class="fin-card-title text-fw-600">Saldo total</span>
-            <span class="fin-card-value" style="color: #4a0d0d;">R$ 12.560,00</span>
+            <span class="fin-card-value" style="color: #4a0d0d;">{{ cards.saldo if cards else 'R$ 0,00' }}</span>
         </div>
     </div>
 
@@ -72,102 +73,19 @@
                 <span>0</span>
             </div>
             <div class="chart-area">
-                <!-- Bar 1 -->
+                {% for col in chart_data %}
                 <div class="chart-column">
-                    <span class="chart-bar-val">62</span>
+                    <span class="chart-bar-val {% if col.is_current %}text-red{% endif %}">
+                        {% if col.is_zero %}-{% else %}{{ col.valor }}{% endif %}
+                    </span>
                     <div class="chart-bar">
-                        <div class="chart-fill bg-gray-bar" style="height: 62%;"></div>
+                        <div class="chart-fill {% if col.is_zero %}bg-light-gray-bar{% elif col.is_current %}bg-red-bar{% else %}bg-gray-bar{% endif %}"
+                            style="height: {{ col.perc }}%;"></div>
                     </div>
-                    <span class="chart-bar-label">Jan</span>
+                    <span class="chart-bar-label {% if col.is_current %}text-red text-fw-600{% endif %}">{{ col.mes
+                        }}</span>
                 </div>
-                <!-- Bar 2 -->
-                <div class="chart-column">
-                    <span class="chart-bar-val">48</span>
-                    <div class="chart-bar">
-                        <div class="chart-fill bg-gray-bar" style="height: 48%;"></div>
-                    </div>
-                    <span class="chart-bar-label">Fev</span>
-                </div>
-                <!-- Bar 3 -->
-                <div class="chart-column">
-                    <span class="chart-bar-val">75</span>
-                    <div class="chart-bar">
-                        <div class="chart-fill bg-gray-bar" style="height: 75%;"></div>
-                    </div>
-                    <span class="chart-bar-label">Mar</span>
-                </div>
-                <!-- Bar 4 -->
-                <div class="chart-column">
-                    <span class="chart-bar-val">83</span>
-                    <div class="chart-bar">
-                        <div class="chart-fill bg-gray-bar" style="height: 83%;"></div>
-                    </div>
-                    <span class="chart-bar-label">Abr</span>
-                </div>
-                <!-- Bar 5 -->
-                <div class="chart-column">
-                    <span class="chart-bar-val">59</span>
-                    <div class="chart-bar">
-                        <div class="chart-fill bg-gray-bar" style="height: 59%;"></div>
-                    </div>
-                    <span class="chart-bar-label">Mai</span>
-                </div>
-                <!-- Bar 6 -->
-                <div class="chart-column">
-                    <span class="chart-bar-val">91</span>
-                    <div class="chart-bar">
-                        <div class="chart-fill bg-gray-bar" style="height: 91%;"></div>
-                    </div>
-                    <span class="chart-bar-label">Jun</span>
-                </div>
-                <!-- Bar 7 -->
-                <div class="chart-column">
-                    <span class="chart-bar-val">68</span>
-                    <div class="chart-bar">
-                        <div class="chart-fill bg-gray-bar" style="height: 68%;"></div>
-                    </div>
-                    <span class="chart-bar-label">Jul</span>
-                </div>
-                <!-- Bar 8 -->
-                <div class="chart-column">
-                    <span class="chart-bar-val">77</span>
-                    <div class="chart-bar">
-                        <div class="chart-fill bg-gray-bar" style="height: 77%;"></div>
-                    </div>
-                    <span class="chart-bar-label">Ago</span>
-                </div>
-                <!-- Bar 9 -->
-                <div class="chart-column">
-                    <span class="chart-bar-val">55</span>
-                    <div class="chart-bar">
-                        <div class="chart-fill bg-gray-bar" style="height: 55%;"></div>
-                    </div>
-                    <span class="chart-bar-label">Set</span>
-                </div>
-                <!-- Bar 10 -->
-                <div class="chart-column">
-                    <span class="chart-bar-val">88</span>
-                    <div class="chart-bar">
-                        <div class="chart-fill bg-gray-bar" style="height: 88%;"></div>
-                    </div>
-                    <span class="chart-bar-label">Out</span>
-                </div>
-                <!-- Bar 11 (Current) -->
-                <div class="chart-column">
-                    <span class="chart-bar-val text-red">94</span>
-                    <div class="chart-bar">
-                        <div class="chart-fill bg-red-bar" style="height: 94%;"></div>
-                    </div>
-                    <span class="chart-bar-label text-red text-fw-600">Nov</span>
-                </div>
-                <!-- Bar 12 -->
-                <div class="chart-column">
-                    <span class="chart-bar-val">-</span>
-                    <div class="chart-bar">
-                        <div class="chart-fill bg-light-gray-bar" style="height: 10%;"></div>
-                    </div>
-                    <span class="chart-bar-label">Dez</span>
-                </div>
+                {% endfor %}
             </div>
         </div>
     </div>
@@ -226,6 +144,18 @@
     </div>
 
     <div class="fin-list-body">
+        {% for fin in transacoes %}
+        <div class="list-item-row fin-row"
+            onclick="abrirDrawerTransacaoEdicao('{{ fin._id }}', '{{ fin.tipo }}', '{{ fin.categoria }}', '{{ fin.valor }}', '{{ fin.data }}', '{{ fin.descricao }}')">
+            <div class="col-cat text-{% if fin.tipo == 'Entrada' %}green{% else %}red{% endif %} fw-bold">{{
+                fin.categoria }}</div>
+            <div class="col-desc">{{ fin.descricao or 'Sem observação' }}</div>
+            <div class="col-date">{{ fin.data or '-' }}</div>
+            <div class="col-val">R$ {{ fin.valor }}</div>
+        </div>
+        {% endfor %}
+
+        {% if not transacoes %}
         <div class="list-item-row fin-row">
             <div class="col-cat text-green fw-bold">Mensalidade</div>
             <div class="col-desc">mensalidade senhor chance</div>
@@ -238,7 +168,9 @@
             <div class="col-date">05-04-2026</div>
             <div class="col-val">R$ 2.000,00</div>
         </div>
+        {% endif %}
     </div>
+</div>
 </div>
 
 <!-- Painel Direito: DRAWER (Nova Transação) -->
@@ -291,17 +223,18 @@
         <div class="form-row-outline mb-4">
             <div class="form-group-outline">
                 <label class="text-primary-sm text-uppercase">VALOR</label>
-                <input type="text" class="input-outline bg-gray-mock" placeholder="R$ 0,00">
+                <input type="number" step="0.01" id="fin-valor" class="input-outline bg-gray-mock" placeholder="0.00"
+                    required>
             </div>
             <div class="form-group-outline">
                 <label class="text-primary-sm text-uppercase">DATA</label>
-                <input type="text" class="input-outline bg-gray-mock" placeholder="00/00/0000">
+                <input type="date" id="fin-data" class="input-outline bg-gray-mock" required>
             </div>
         </div>
 
         <div class="form-group-outline mb-4">
             <label class="text-primary-sm text-uppercase">OBSERVAÇÃO</label>
-            <textarea class="textarea-outline bg-gray-mock" rows="4"
+            <textarea id="fin-obs" class="textarea-outline bg-gray-mock" rows="4"
                 placeholder="Adicione uma observação..."></textarea>
         </div>
 
@@ -315,16 +248,86 @@
 </div>
 
 <script>
+    let editingFinId = null;
+
     function abrirDrawerTransacao() {
+        editingFinId = null;
+        document.querySelector('.drawer-header h2').innerText = 'Nova Transação';
+
+        document.getElementById('fin-valor').value = '';
+        document.getElementById('fin-data').value = '';
+        document.getElementById('fin-obs').value = '';
+        document.getElementById('categoria-selected').innerHTML = 'Selecione uma categoria';
+        setTipo('entrada');
+
+        document.getElementById('transacao-drawer').style.display = 'flex';
+    }
+
+    function abrirDrawerTransacaoEdicao(id, tipo, cat, val, data, desc) {
+        editingFinId = id;
+        document.querySelector('.drawer-header h2').innerText = 'Editar Transação';
+
+        setTipo(tipo.toLowerCase() === 'entrada' ? 'entrada' : 'saida');
+
+        let color = '#ccc';
+        if (cat === 'Receita de Aluguel') color = '#1e7a36';
+        else if (cat === 'Serviços Prestados') color = '#2274A5';
+        else if (cat === 'Manutenção') color = '#D35400';
+        else if (cat === 'Despesas Fixas') color = '#7a1515';
+        else if (cat === 'Outros') color = '#8E44AD';
+
+        selectCategoria(cat, color);
+
+        document.getElementById('fin-valor').value = val !== 'None' ? val : '';
+        document.getElementById('fin-data').value = data !== 'None' ? data : '';
+        document.getElementById('fin-obs').value = desc !== 'None' ? desc : '';
+
         document.getElementById('transacao-drawer').style.display = 'flex';
     }
 
     function fecharDrawerTransacao() {
         document.getElementById('transacao-drawer').style.display = 'none';
         document.getElementById('categoria-options').style.display = 'none';
+        editingFinId = null;
     }
 
     function salvarDrawerTransacao() {
+        const tipoEl = document.querySelector('.tipo-toggle-group .active') || document.querySelector('.tipo-toggle-group .active-saida');
+        const isEntrada = tipoEl && tipoEl.id === 'btn-entrada';
+
+        let categoriaText = document.getElementById('categoria-selected').innerText.trim();
+        if (categoriaText === 'Selecione uma categoria') categoriaText = '';
+
+        const payload = {
+            id: editingFinId,
+            tipo: isEntrada ? 'Entrada' : 'Saída',
+            categoria: categoriaText,
+            valor: document.getElementById('fin-valor')?.value || '',
+            data: document.getElementById('fin-data')?.value || '',
+            descricao: document.getElementById('fin-obs')?.value || ''
+        };
+
+        if (!payload.valor || !payload.categoria) {
+            alert('Preencha a categoria e valor.');
+            return;
+        }
+
+        fetch('/admin/api/financeiro', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert("Transação arquivada!");
+                    window.location.reload();
+                } else {
+                    alert("Erro: " + data.message);
+                }
+            })
+            .catch(err => alert("Erro ao conectar à API."));
+
         fecharDrawerTransacao();
     }
 

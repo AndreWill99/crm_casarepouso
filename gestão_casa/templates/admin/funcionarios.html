@@ -24,9 +24,10 @@
     </button>
 </div>
 
-<button class="topbar-btn-fill">
+<a href="/admin/export/funcionarios" class="topbar-btn-fill"
+    style="text-decoration:none; display:flex; align-items:center;">
     Exportar
-</button>
+</a>
 
 <button class="topbar-btn-outline" onclick="abrirDrawer(true)">
     + Adicionar
@@ -97,6 +98,31 @@
 
         <!-- Linhas Mock -->
         <div class="list-body">
+            {% for func in funcionarios %}
+            <div class="list-item-row" onclick="abrirDrawer(false, this)">
+                <div class="col-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                </div>
+                <div class="col-nome align-flex">
+                    <div class="avatar-circle"></div> {{ func.nome }}
+                </div>
+                <div class="col-cargo">{{ func.cargo }}</div>
+                <div class="col-idade">-</div>
+                <div class="col-tel">{{ func.telefone or 'Não Informado' }}</div>
+                <div class="col-status">
+                    <span
+                        class="badge-status {% if func.status == 'Ativo' %}status-ativo{% elif func.status == 'Desligado' %}status-desligado{% else %}status-afastado{% endif %}">{{
+                        func.status }}</span>
+                </div>
+                <div class="col-data">{{ func.data_admissao }}</div>
+            </div>
+            {% endfor %}
+
+            {% if not funcionarios %}
+            <!-- Mockups default se banco estiver limpo -->
             <div class="list-item-row" onclick="abrirDrawer(false, this)">
                 <div class="col-icon">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -113,40 +139,7 @@
                 <div class="col-status"><span class="badge-status status-ativo">Ativo</span></div>
                 <div class="col-data">02-04-2025</div>
             </div>
-
-            <div class="list-item-row" onclick="abrirDrawer(false, this)">
-                <div class="col-icon">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                    </svg>
-                </div>
-                <div class="col-nome align-flex">
-                    <div class="avatar-circle"></div> Emery Aminoff
-                </div>
-                <div class="col-cargo">Cozinheira</div>
-                <div class="col-idade">82</div>
-                <div class="col-tel">(00) 0000-0000</div>
-                <div class="col-status"><span class="badge-status status-desligado">Desligado</span></div>
-                <div class="col-data">05-06-2025</div>
-            </div>
-
-            <div class="list-item-row" onclick="abrirDrawer(false, this)">
-                <div class="col-icon">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                    </svg>
-                </div>
-                <div class="col-nome align-flex">
-                    <div class="avatar-circle"></div> Gustavo Geidt
-                </div>
-                <div class="col-cargo">Enfermeiro</div>
-                <div class="col-idade">78</div>
-                <div class="col-tel">(00) 0000-0000</div>
-                <div class="col-status"><span class="badge-status status-afastado">Afastado</span></div>
-                <div class="col-data">23-07-2024</div>
-            </div>
+            {% endif %}
 
         </div>
     </div>
@@ -175,21 +168,22 @@
                         <div class="form-row-outline">
                             <div class="form-group-outline">
                                 <label>Data de nascimento</label>
-                                <input type="text" class="input-outline" placeholder="00/00/0000">
+                                <input type="date" id="func-nascimento" class="input-outline" required>
                             </div>
                             <div class="form-group-outline">
                                 <label>Data de admissão</label>
-                                <input type="text" class="input-outline" placeholder="00/00/0000">
+                                <input type="date" id="func-admissao" class="input-outline" required>
                             </div>
                         </div>
                         <div class="form-row-outline">
                             <div class="form-group-outline">
                                 <label>CPF</label>
-                                <input type="text" class="input-outline bg-gray-mock" placeholder="000.000.000-00">
+                                <input type="text" id="func-cpf" class="input-outline bg-gray-mock"
+                                    placeholder="000.000.000-00">
                             </div>
                             <div class="form-group-outline">
                                 <label>Status</label>
-                                <select class="input-outline bg-gray-mock">
+                                <select id="func-status" class="input-outline bg-gray-mock">
                                     <option>Ativo</option>
                                     <option>Desligado</option>
                                     <option>Afastado</option>
@@ -204,11 +198,13 @@
                 <div class="form-row-outline mt-3">
                     <div class="form-group-outline">
                         <label>E-mail</label>
-                        <input type="text" class="input-outline bg-gray-mock" placeholder="">
+                        <input type="email" id="func-email" class="input-outline bg-gray-mock"
+                            placeholder="usuario@email.com">
                     </div>
                     <div class="form-group-outline">
                         <label>Telefone</label>
-                        <input type="text" class="input-outline bg-gray-mock text-center" placeholder="00 0000-0000">
+                        <input type="tel" id="func-telefone" class="input-outline bg-gray-mock text-center"
+                            placeholder="(00) 00000-0000" pattern="[0-9/.\-\s\(\)]+">
                     </div>
                 </div>
 
@@ -217,28 +213,41 @@
                 <div class="form-row-outline mt-3">
                     <div class="form-group-outline">
                         <label class="text-primary-md">Turno:</label>
-                        <select class="input-outline bg-gray-mock">
-                            <option></option>
+                        <select id="func-turno" class="input-outline bg-gray-mock">
+                            <option>Diurno</option>
+                            <option>Noturno</option>
+                            <option>Integral</option>
                         </select>
                     </div>
                     <div class="form-group-outline">
                         <label class="text-primary-md">Salário Base:</label>
-                        <input type="text" class="input-outline bg-gray-mock" placeholder="R$ 2.300,00">
+                        <input type="text" id="func-salarioBase" class="input-outline bg-gray-mock"
+                            placeholder="R$ 2.300,00">
                     </div>
                 </div>
 
                 <div class="form-row-outline mt-3">
                     <div class="form-group-outline">
                         <label>Cargo</label>
-                        <select class="input-outline bg-gray-mock">
-                            <option></option>
-                        </select>
+                        <input type="text" list="list-cargos" id="func-cargo" class="input-outline bg-gray-mock"
+                            placeholder="Escolha ou digite...">
+                        <datalist id="list-cargos">
+                            <option value="Enfermeiro(a) Chefe">
+                            <option value="Técnico(a) de Enfermagem">
+                            <option value="Cuidador(a)">
+                            <option value="Recepcionista">
+                            <option value="Administrador">
+                        </datalist>
                     </div>
                     <div class="form-group-outline">
                         <label>Escala</label>
-                        <select class="input-outline bg-gray-mock">
-                            <option></option>
-                        </select>
+                        <input type="text" list="list-escala" id="func-escala" class="input-outline bg-gray-mock"
+                            placeholder="Escolha ou digite...">
+                        <datalist id="list-escala">
+                            <option value="12x36">
+                            <option value="Segunda a Sexta (8h/dia)">
+                            <option value="Diarista/Folgado">
+                        </datalist>
                     </div>
                 </div>
             </div>
@@ -433,45 +442,53 @@
     }
 
     function salvarDrawer() {
-        const inputNome = document.getElementById('drawer-input-nome');
-        const nomeValue = inputNome ? inputNome.value.trim() : '';
+        const payload = {
+            nome: document.getElementById('drawer-input-nome')?.value || '',
+            nascimento: document.getElementById('func-nascimento')?.value || '',
+            admissao: document.getElementById('func-admissao')?.value || '',
+            cpf: document.getElementById('func-cpf')?.value || '',
+            status: document.getElementById('func-status')?.value || '',
+            email: document.getElementById('func-email')?.value || '',
+            telefone: document.getElementById('func-telefone')?.value || '',
+            turno: document.getElementById('func-turno')?.value || '',
+            salario_base: document.getElementById('func-salarioBase')?.value || '',
+            cargo: document.getElementById('func-cargo')?.value || '',
+            escala: document.getElementById('func-escala')?.value || ''
+        };
 
-        if (!nomeValue) {
+        if (!payload.nome) {
             alert('Por favor, preencha o Nome antes de confirmar.');
             return;
         }
 
         if (isAddingNew) {
-            const listBody = document.querySelector('.list-body');
+            fetch('/admin/api/funcionarios', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        alert("Funcionário criado com sucesso na DB!");
+                        window.location.reload();
+                    } else {
+                        alert("Erro: " + data.message);
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert("Erro ao conectar à API.");
+                });
 
-            const tr = document.createElement('div');
-            tr.className = 'list-item-row';
-            tr.onclick = function () { abrirDrawer(false, this); };
-            tr.innerHTML = `
-                <div class="col-icon">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                    </svg>
-                </div>
-                <div class="col-nome align-flex">
-                    <div class="avatar-circle"></div> ${nomeValue}
-                </div>
-                <div class="col-cargo">Novo Cargo</div>
-                <div class="col-idade">30</div>
-                <div class="col-tel">(00) 0000-0000</div>
-                <div class="col-status"><span class="badge-status status-ativo">Ativo</span></div>
-                <div class="col-data">01-01-2026</div>
-            `;
-            listBody.appendChild(tr);
         } else if (currentRow) {
+            alert("Update mockado.");
             const colNome = currentRow.querySelector('.col-nome');
             if (colNome) {
-                colNome.innerHTML = `<div class="avatar-circle"></div> ${nomeValue}`;
+                colNome.innerHTML = `<div class="avatar-circle"></div> ${payload.nome}`;
             }
+            fecharDrawer();
         }
-
-        fecharDrawer();
     }
 
     function switchTab(tabId, btnElement) {

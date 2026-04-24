@@ -15,6 +15,10 @@
     </div>
 </div>
 
+<a href="/admin/export/leads" class="topbar-btn-fill"
+    style="text-decoration:none; display:flex; align-items:center; margin-right:-10px;">
+    Exportar
+</a>
 <button class="topbar-btn-fill" onclick="abrirDrawerLead()">
     + Novo Lead
 </button>
@@ -33,9 +37,9 @@
                     <line x1="12" y1="3" x2="12" y2="15"></line>
                 </svg>
             </div>
-            <span class="fin-card-title text-fw-600">NOVOS LEADS — JULHO</span>
-            <span class="fin-card-value text-red">34</span>
-            <div class="leads-card-badge badge-green">↑ 12% vs mês anterior</div>
+            <span class="fin-card-title text-fw-600">NOVOS LEADS — MÊS</span>
+            <span class="fin-card-value text-red">{{ funnel.novo }}</span>
+            <div class="leads-card-badge badge-green">N/A vs mês anterior</div>
         </div>
         <!-- Card 2 -->
         <div class="fin-card shadow-sm leads-card">
@@ -45,9 +49,9 @@
                     <polyline points="22 4 12 14.01 9 11.01"></polyline>
                 </svg>
             </div>
-            <span class="fin-card-title text-fw-600">LEADS CONVERTIDOS — JULHO</span>
-            <span class="fin-card-value text-green">8</span>
-            <div class="leads-card-badge badge-green">Taxa: 23.5%</div>
+            <span class="fin-card-title text-fw-600">LEADS CONVERTIDOS</span>
+            <span class="fin-card-value text-green">{{ funnel.convertido }}</span>
+            <div class="leads-card-badge badge-green">Taxa de Conversão Real</div>
         </div>
         <!-- Card 3 -->
         <div class="fin-card shadow-sm leads-card">
@@ -57,9 +61,9 @@
                     <circle cx="12" cy="12" r="3"></circle>
                 </svg>
             </div>
-            <span class="fin-card-title text-fw-600">ALCANCE — VISITAS AO SITE</span>
-            <span class="fin-card-value text-blue">1.248</span>
-            <div class="leads-card-badge badge-blue">↑ 8% esta semana</div>
+            <span class="fin-card-title text-fw-600">ALCANCE — VISITAS SITE</span>
+            <span class="fin-card-value text-blue">{{ funnel.total_visitas_site }}</span>
+            <div class="leads-card-badge badge-blue">Sincronizado</div>
         </div>
     </div>
 
@@ -76,41 +80,53 @@
             <div class="funnel-container">
                 <!-- Bar 1 -->
                 <div class="funnel-row">
-                    <div class="funnel-label">Alcance <span class="funnel-val text-fw-600 text-blue">1.248</span></div>
+                    <div class="funnel-label">Alcance <span class="funnel-val text-fw-600 text-blue">{{
+                            funnel.total_visitas_site }}</span></div>
                     <div class="funnel-bar-track">
                         <div class="funnel-bar bg-blue" style="width: 100%;"></div>
                     </div>
                 </div>
                 <!-- Bar 2 -->
                 <div class="funnel-row">
-                    <div class="funnel-label">Novos Leads <span class="funnel-val text-fw-600 text-red">34</span></div>
+                    <div class="funnel-label">Novos Leads <span class="funnel-val text-fw-600 text-red">{{ funnel.novo
+                            }}</span></div>
                     <div class="funnel-bar-track">
-                        <div class="funnel-bar bg-red" style="width: 75%;"></div>
+                        <div class="funnel-bar bg-red"
+                            style="width: {{ (funnel.novo / funnel.total_leads * 100)|round|int if funnel.total_leads else 0 }}%;">
+                        </div>
                     </div>
                 </div>
                 <!-- Bar 3 -->
                 <div class="funnel-row">
-                    <div class="funnel-label">Em Contato <span class="funnel-val text-fw-600 text-orange">20</span>
+                    <div class="funnel-label">Em Contato <span class="funnel-val text-fw-600 text-orange">{{
+                            funnel.em_contato }}</span>
                     </div>
                     <div class="funnel-bar-track">
-                        <div class="funnel-bar bg-orange" style="width: 45%;"></div>
+                        <div class="funnel-bar bg-orange"
+                            style="width: {{ (funnel.em_contato / funnel.total_leads * 100)|round|int if funnel.total_leads else 0 }}%;">
+                        </div>
                     </div>
                 </div>
                 <!-- Bar 4 -->
                 <div class="funnel-row">
-                    <div class="funnel-label">Ag. Visita <span class="funnel-val text-fw-600 text-purple">11</span>
+                    <div class="funnel-label">Ag. Visita <span class="funnel-val text-fw-600 text-purple">{{
+                            funnel.ag_visita }}</span>
                     </div>
                     <div class="funnel-bar-track">
-                        <div class="funnel-bar bg-purple" style="width: 25%;"></div>
+                        <div class="funnel-bar bg-purple"
+                            style="width: {{ (funnel.ag_visita / funnel.total_leads * 100)|round|int if funnel.total_leads else 0 }}%;">
+                        </div>
                     </div>
                 </div>
                 <!-- Bar 5 -->
                 <div class="funnel-row"
                     style="margin-top: 15px; border-top: 1px dashed rgba(122,21,21,0.2); padding-top:15px;">
                     <div class="funnel-label text-green fw-bold">✓ Convertidos <span
-                            class="funnel-val text-fw-600 text-green">8</span></div>
+                            class="funnel-val text-fw-600 text-green">{{ funnel.convertido }}</span></div>
                     <div class="funnel-bar-track">
-                        <div class="funnel-bar bg-green" style="width: 15%;"></div>
+                        <div class="funnel-bar bg-green"
+                            style="width: {{ (funnel.convertido / funnel.total_leads * 100)|round|int if funnel.total_leads else 0 }}%;">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -146,61 +162,22 @@
             </div>
 
             <div class="leads-list-body">
-                <!-- Item 1 -->
-                <div class="fin-row leads-row">
+                {% for lead in leads %}
+                <div class="fin-row leads-row"
+                    onclick="abrirDrawerLeadEdicao('{{ lead._id }}', '{{ lead.nome }}', '{{ lead.telefone }}', '{{ lead.email }}', '{{ lead.nome_idoso }}', '{{ lead.idade_gen }}', '{{ lead.grau }}', '{{ lead.obs|replace('\n', ' ') }}', '{{ lead.status }}')">
                     <div class="col-lead-name">
-                        <div class="avatar bg-red-pale">CM</div> Carlos Mendes
+                        <div class="avatar bg-{% if loop.index % 2 == 0 %}purple{% else %}red{% endif %}-pale">{{
+                            lead.nome[:2].upper() }}</div> {{ lead.nome }}
                     </div>
-                    <div class="col-lead-idoso">Sra. Rosa M.</div>
-                    <div class="col-lead-grau"><span class="grau-badge">G2</span></div>
-                    <div class="col-lead-status"><span class="status-badge bd-blue">Novo</span></div>
-                    <div class="col-lead-valor">R$ 4.200</div>
-                    <div class="col-lead-acao"><button class="btn-outline-action">Ver detalhes</button></div>
+                    <div class="col-lead-idoso">{{ lead.nome_idoso or '-' }}</div>
+                    <div class="col-lead-grau"><span class="grau-badge">{{ lead.grau[:2] }}</span></div>
+                    <div class="col-lead-status"><span
+                            class="status-badge bd-{% if 'Novo' in lead.status %}blue{% elif 'Contato' in lead.status %}orange{% elif 'Visita' in lead.status %}purple{% else %}green{% endif %}">{{
+                            lead.status }}</span></div>
+                    <div class="col-lead-valor">R$ --</div>
+                    <div class="col-lead-acao"><button class="btn-outline-action">Editar</button></div>
                 </div>
-                <!-- Item 2 -->
-                <div class="fin-row leads-row">
-                    <div class="col-lead-name">
-                        <div class="avatar bg-purple-pale">AL</div> Ana Lima
-                    </div>
-                    <div class="col-lead-idoso">Sr. José L.</div>
-                    <div class="col-lead-grau"><span class="grau-badge">G3</span></div>
-                    <div class="col-lead-status"><span class="status-badge bd-purple">Ag. Visita</span></div>
-                    <div class="col-lead-valor">R$ 6.800</div>
-                    <div class="col-lead-acao"><button class="btn-outline-action">Ver detalhes</button></div>
-                </div>
-                <!-- Item 3 -->
-                <div class="fin-row leads-row">
-                    <div class="col-lead-name">
-                        <div class="avatar bg-orange-pale">RS</div> Roberto Silva
-                    </div>
-                    <div class="col-lead-idoso">Sra. Maria S.</div>
-                    <div class="col-lead-grau"><span class="grau-badge">G1</span></div>
-                    <div class="col-lead-status"><span class="status-badge bd-orange">Em Contato</span></div>
-                    <div class="col-lead-valor">R$ 2.800</div>
-                    <div class="col-lead-acao"><button class="btn-outline-action">Ver detalhes</button></div>
-                </div>
-                <!-- Item 4 -->
-                <div class="fin-row leads-row">
-                    <div class="col-lead-name">
-                        <div class="avatar bg-green-pale">FO</div> Fernanda Oliveira
-                    </div>
-                    <div class="col-lead-idoso">Sr. Antônio O.</div>
-                    <div class="col-lead-grau"><span class="grau-badge">G2</span></div>
-                    <div class="col-lead-status"><span class="status-badge bd-green">Convertido</span></div>
-                    <div class="col-lead-valor text-green">R$ 4.500</div>
-                    <div class="col-lead-acao"><button class="btn-outline-action btn-success">Matriculado</button></div>
-                </div>
-                <!-- Item 5 -->
-                <div class="fin-row leads-row">
-                    <div class="col-lead-name">
-                        <div class="avatar bg-red-pale">MC</div> Marcos Costa
-                    </div>
-                    <div class="col-lead-idoso">Sra. Helena C.</div>
-                    <div class="col-lead-grau"><span class="grau-badge">G3</span></div>
-                    <div class="col-lead-status"><span class="status-badge bd-blue">Novo</span></div>
-                    <div class="col-lead-valor">R$ 6.200</div>
-                    <div class="col-lead-acao"><button class="btn-outline-action">Ver detalhes</button></div>
-                </div>
+                {% endfor %}
             </div>
         </div>
 
@@ -229,16 +206,16 @@
             Dados de Contato</h4>
         <div class="form-group-outline mb-4">
             <label class="text-primary-sm text-uppercase">NOME DO INTERESSADO</label>
-            <input type="text" class="input-outline bg-gray-mock" placeholder="Ex: Carlos Mendes">
+            <input type="text" id="lead-nome" class="input-outline bg-gray-mock" placeholder="Ex: Carlos Mendes">
         </div>
         <div class="form-row-outline mb-4">
             <div class="form-group-outline">
                 <label class="text-primary-sm text-uppercase">TELEFONE / WHATSAPP</label>
-                <input type="text" class="input-outline bg-gray-mock" placeholder="(11) 90000-0000">
+                <input type="text" id="lead-telefone" class="input-outline bg-gray-mock" placeholder="(11) 90000-0000">
             </div>
             <div class="form-group-outline">
                 <label class="text-primary-sm text-uppercase">E-MAIL</label>
-                <input type="email" class="input-outline bg-gray-mock" placeholder="carlos@email.com">
+                <input type="email" id="lead-email" class="input-outline bg-gray-mock" placeholder="carlos@email.com">
             </div>
         </div>
 
@@ -248,20 +225,20 @@
             Sobre o Idoso</h4>
         <div class="form-group-outline mb-4">
             <label class="text-primary-sm text-uppercase">NOME DO IDOSO</label>
-            <input type="text" class="input-outline bg-gray-mock" placeholder="Ex: Sra. Rosa M.">
+            <input type="text" id="lead-idoso" class="input-outline bg-gray-mock" placeholder="Ex: Sra. Rosa M.">
         </div>
         <div class="form-row-outline mb-4">
             <div class="form-group-outline">
                 <label class="text-primary-sm text-uppercase">IDADE / GÊNERO</label>
-                <input type="text" class="input-outline bg-gray-mock" placeholder="82 anos, Fem">
+                <input type="text" id="lead-idade-gen" class="input-outline bg-gray-mock" placeholder="82 anos, Fem">
             </div>
             <div class="form-group-outline">
                 <label class="text-primary-sm text-uppercase">GRAU DE PATOLOGIA</label>
-                <select class="input-outline bg-gray-mock"
+                <select id="lead-grau" class="input-outline bg-gray-mock"
                     style="width: 100%; border: 1px solid var(--primary-color); border-radius: 12px; padding: 12px 15px; color: #555;">
-                    <option>G1 - Independente</option>
-                    <option>G2 - Dependência Parcial</option>
-                    <option>G3 - Dependência Total</option>
+                    <option value="G1 - Independente">G1 - Independente</option>
+                    <option value="G2 - Dependência Parcial">G2 - Dependência Parcial</option>
+                    <option value="G3 - Dependência Total">G3 - Dependência Total</option>
                 </select>
             </div>
         </div>
@@ -272,7 +249,7 @@
             Informações Enviadas (Site)</h4>
         <div class="form-group-outline mb-4">
             <label class="text-primary-sm text-uppercase">MENSAGEM ORIGINAL</label>
-            <textarea class="textarea-outline bg-gray-mock" rows="3"
+            <textarea id="lead-obs" class="textarea-outline bg-gray-mock" rows="3"
                 placeholder="Mensagem deixada no formulário de contato do site..."></textarea>
         </div>
 
@@ -282,12 +259,12 @@
             Status do Lead</h4>
         <div class="form-group-outline mb-4">
             <label class="text-primary-sm text-uppercase">ETAPA NO FUNIL</label>
-            <select class="input-outline bg-gray-mock"
+            <select id="lead-status" class="input-outline bg-gray-mock"
                 style="width: 100%; border: 1px solid var(--primary-color); border-radius: 12px; padding: 12px 15px; color: #555;">
-                <option>Novo</option>
-                <option>Em Contato</option>
-                <option>Agendou Visita</option>
-                <option>Convertido (Matriculado)</option>
+                <option value="Novo">Novo</option>
+                <option value="Em Contato">Em Contato</option>
+                <option value="Agendou Visita">Agendou Visita</option>
+                <option value="Convertido (Matriculado)">Convertido (Matriculado)</option>
             </select>
         </div>
 
@@ -301,15 +278,84 @@
 </div>
 
 <script>
+    let editingLeadId = null;
+
     function abrirDrawerLead() {
+        editingLeadId = null;
+        document.querySelector('.drawer-header h2').innerText = "Novo Lead";
+
+        document.getElementById('lead-nome').value = '';
+        document.getElementById('lead-telefone').value = '';
+        document.getElementById('lead-email').value = '';
+        document.getElementById('lead-idoso').value = '';
+        document.getElementById('lead-idade-gen').value = '';
+        document.getElementById('lead-grau').value = 'G1 - Independente';
+        document.getElementById('lead-obs').value = '';
+        document.getElementById('lead-status').value = 'Novo';
+
+        document.getElementById('lead-drawer').style.display = 'flex';
+    }
+
+    function abrirDrawerLeadEdicao(id, nome, telefone, email, idoso, idade, grau, obs, status) {
+        editingLeadId = id;
+        document.querySelector('.drawer-header h2').innerText = "Editar Lead";
+
+        document.getElementById('lead-nome').value = nome !== 'None' ? nome : '';
+        document.getElementById('lead-telefone').value = telefone !== 'None' ? telefone : '';
+        document.getElementById('lead-email').value = email !== 'None' ? email : '';
+        document.getElementById('lead-idoso').value = idoso !== 'None' ? idoso : '';
+        document.getElementById('lead-idade-gen').value = idade !== 'None' ? idade : '';
+
+        if (grau && grau !== 'None') {
+            document.getElementById('lead-grau').value = grau;
+        }
+        document.getElementById('lead-obs').value = obs !== 'None' ? obs : '';
+        if (status && status !== 'None') {
+            document.getElementById('lead-status').value = status;
+        }
+
         document.getElementById('lead-drawer').style.display = 'flex';
     }
 
     function fecharDrawerLead() {
         document.getElementById('lead-drawer').style.display = 'none';
+        editingLeadId = null;
     }
 
     function salvarDrawerLead() {
+        const payload = {
+            id: editingLeadId,
+            nome: document.getElementById('lead-nome').value,
+            telefone: document.getElementById('lead-telefone').value,
+            email: document.getElementById('lead-email').value,
+            nome_idoso: document.getElementById('lead-idoso').value,
+            idade_gen: document.getElementById('lead-idade-gen').value,
+            grau: document.getElementById('lead-grau').value,
+            obs: document.getElementById('lead-obs').value,
+            status: document.getElementById('lead-status').value
+        };
+
+        if (!payload.nome) {
+            alert('Por favor, informe pelo menos o nome do interessado.');
+            return;
+        }
+
+        fetch('/admin/api/leads', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert("Lead salvo com sucesso!");
+                    window.location.reload();
+                } else {
+                    alert("Erro: " + data.message);
+                }
+            })
+            .catch(err => alert("Erro ao conectar à API."));
+
         fecharDrawerLead();
     }
 </script>

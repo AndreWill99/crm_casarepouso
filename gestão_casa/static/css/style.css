@@ -140,7 +140,7 @@ h3 {
     left: 0;
     width: 100%;
     z-index: 1000;
-    background-color: rgba(255, 238, 213, 0.7);
+    background-color: rgba(245, 235, 205, 0.5);
     /* Bege Claro com 70% de opacidade */
     backdrop-filter: blur(10px);
     padding: 10px 0;
@@ -3174,9 +3174,9 @@ select.input-outline {
 }
 
 .topbar-search-wrapper {
-    background-color: #E1D2BC 0.25 !important;
+    background-color: rgba(225, 210, 188, 0.25) !important;
 }
 
 .topbar-search-input {
-    background-color: #E1D2BC 0.25 !important;
+    background-color: rgba(225, 210, 188, 0.25) !important;
 }

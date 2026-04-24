@@ -29,6 +29,18 @@
                 <h1 class="auth-title">Criar sua conta</h1>
                 <p class="auth-desc">Preencha os campos abaixo para se registrar no sistema.</p>
 
+                {% if error %}
+                <div
+                    style="color:#D35400; background:#fdede4; padding:10px 15px; border-radius:8px; margin-bottom:20px; font-weight:600; text-align:center; display:flex; align-items:center; justify-content:center; gap:8px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                    {{ error }}
+                </div>
+                {% endif %}
+
                 <form action="/auth/register" method="POST">
                     <div class="auth-form-group">
                         <label class="auth-label">Nome Completo</label>
