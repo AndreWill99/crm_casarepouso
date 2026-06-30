@@ -3,35 +3,6 @@
 {% block title %}Financeiro - CRM Casa de Repouso{% endblock %}
 
 {% block topbar_actions %}
-<div class="search-filter-group"
-    style="position: absolute; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; align-items: center;">
-    <div class="topbar-search-wrapper">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-        </svg>
-        <input type="text" class="topbar-search-input" placeholder="">
-    </div>
-
-    <button class="topbar-btn-filter">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <line x1="4" y1="6" x2="20" y2="6"></line>
-            <line x1="7" y1="12" x2="17" y2="12"></line>
-            <line x1="10" y1="18" x2="14" y2="18"></line>
-        </svg>
-    </button>
-</div>
-
-<a href="/admin/export/financeiro" class="topbar-btn-fill"
-    style="text-decoration:none; display:flex; align-items:center;">
-    Exportar
-</a>
-
-<button class="topbar-btn-outline" onclick="abrirDrawerTransacao()">
-    + Adicionar
-</button>
 {% endblock %}
 
 {% block content %}
@@ -55,9 +26,19 @@
     <!-- Row 2: Chart Card -->
     <div class="fin-chart-card shadow-sm mt-4">
         <div class="fin-chart-header">
-            <div>
-                <h3 style="margin: 0; color: #555; font-size: 1.1rem;">Desempenho Mensal</h3>
-                <span style="font-size: 0.85rem; color: #888;">Visão geral do ano de 2024</span>
+            <div style="display:flex; align-items:center;">
+                <div>
+                    <h3 style="margin: 0; color: #555; font-size: 1.1rem;">Desempenho Mensal</h3>
+                    <span style="font-size: 0.85rem; color: #888;">Visão geral do ano de 2024</span>
+                </div>
+            </div>
+            <div style="display:flex; gap:10px; margin-left: auto; margin-right: 20px;">
+                <button class="pill-btn chart-pill active" id="btn-chart-todos" onclick="toggleChartView('todos')"
+                    style="padding: 4px 12px; border-radius: 12px; border: 1px solid #ccc; background: #7a1515; color: white; cursor:pointer;">Todos</button>
+                <button class="pill-btn chart-pill" id="btn-chart-entradas" onclick="toggleChartView('entradas')"
+                    style="padding: 4px 12px; border-radius: 12px; border: 1px solid #ccc; background: #fff; cursor:pointer;">Entradas</button>
+                <button class="pill-btn chart-pill" id="btn-chart-despesas" onclick="toggleChartView('despesas')"
+                    style="padding: 4px 12px; border-radius: 12px; border: 1px solid #ccc; background: #fff; cursor:pointer;">Despesas</button>
             </div>
             <div class="fin-chart-legend">
                 <span class="legend-item"><span class="dot" style="background: #cfc8bd;"></span> MESES ANTERIORES</span>
@@ -75,12 +56,17 @@
             <div class="chart-area">
                 {% for col in chart_data %}
                 <div class="chart-column">
-                    <span class="chart-bar-val {% if col.is_current %}text-red{% endif %}">
+                    <span class="chart-bar-val {% if col.is_current %}text-red{% endif %}"
+                        data-val-todos="{% if col.is_zero %}-{% else %}{{ col.valor }}{% endif %}"
+                        data-val-entradas="{% if col.valor_e == 0 %}-{% else %}{{ col.valor_e }}{% endif %}"
+                        data-val-despesas="{% if col.valor_d == 0 %}-{% else %}{{ col.valor_d }}{% endif %}">
                         {% if col.is_zero %}-{% else %}{{ col.valor }}{% endif %}
                     </span>
                     <div class="chart-bar">
                         <div class="chart-fill {% if col.is_zero %}bg-light-gray-bar{% elif col.is_current %}bg-red-bar{% else %}bg-gray-bar{% endif %}"
-                            style="height: {{ col.perc }}%;"></div>
+                            data-perc-todos="{{ col.perc }}" data-perc-entradas="{{ col.perc_entrada }}"
+                            data-perc-despesas="{{ col.perc_despesa }}"
+                            style="height: {{ col.perc }}%; transition: height 0.4s ease;"></div>
                     </div>
                     <span class="chart-bar-label {% if col.is_current %}text-red text-fw-600{% endif %}">{{ col.mes
                         }}</span>
@@ -91,17 +77,53 @@
     </div>
 
     <!-- Row 3: Table and Controls -->
-    <div class="fin-table-controls">
-        <button class="sort-drop-btn">ordenar por
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="8" y1="6" x2="21" y2="6"></line>
-                <line x1="8" y1="12" x2="21" y2="12"></line>
-                <line x1="8" y1="18" x2="21" y2="18"></line>
-                <line x1="3" y1="6" x2="3" y2="6"></line>
-                <line x1="3" y1="12" x2="3" y2="12"></line>
-                <line x1="3" y1="18" x2="3" y2="18"></line>
-            </svg>
+    <div class="fin-table-controls"
+        style="display: flex; gap: 15px; align-items: center; justify-content: flex-start; flex-wrap: wrap; margin-top: 30px;">
+        <div class="search-filter-group" style="display: flex; gap: 10px; align-items: center; flex: 1;">
+            <div class="topbar-search-wrapper" style="box-shadow: 0 2px 5px rgba(0,0,0,0.05); min-width: 300px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" class="topbar-search-input" id="search-financeiro" placeholder="Buscar transação...">
+            </div>
+            <button class="topbar-btn-filter" style="box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="4" y1="6" x2="20" y2="6"></line>
+                    <line x1="7" y1="12" x2="17" y2="12"></line>
+                    <line x1="10" y1="18" x2="14" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+
+        <a href="/admin/export/financeiro" class="topbar-btn-fill"
+            style="text-decoration:none; display:flex; align-items:center; background-color:#7a1515;">
+            Exportar
+        </a>
+        <button class="topbar-btn-outline" onclick="abrirDrawerTransacao()"
+            style="color:#7a1515; border-color:#7a1515;">
+            + Adicionar
         </button>
+
+        <select id="filter-month" class="sort-drop-btn"
+            style="appearance: none; padding-right: 15px; cursor: pointer; text-align:center;"
+            onchange="filtrarTransacoesPorMes()">
+            <option value="all">Filtrar (Mês)</option>
+            <option value="01">Janeiro</option>
+            <option value="02">Fevereiro</option>
+            <option value="03">Março</option>
+            <option value="04">Abril</option>
+            <option value="05">Maio</option>
+            <option value="06">Junho</option>
+            <option value="07">Julho</option>
+            <option value="08">Agosto</option>
+            <option value="09">Setembro</option>
+            <option value="10">Outubro</option>
+            <option value="11">Novembro</option>
+            <option value="12">Dezembro</option>
+        </select>
     </div>
 
     <div class="fin-list-header-row mt-4">
@@ -353,5 +375,60 @@
         document.getElementById('categoria-selected').innerHTML = `<span class="dot" style="background:${color}; margin-right: 8px;"></span> ${text}`;
         document.getElementById('categoria-options').style.display = 'none';
     }
+
+    function toggleChartView(viewMode) {
+        document.querySelectorAll('.chart-pill').forEach(btn => {
+            btn.style.background = '#fff';
+            btn.style.color = '#000';
+            btn.classList.remove('active');
+        });
+        const currentBtn = document.getElementById('btn-chart-' + viewMode);
+        document.querySelectorAll('.chart-pill').forEach(btn => btn.style.border = '1px solid #ccc');
+        currentBtn.style.background = '#7a1515';
+        currentBtn.style.color = 'white';
+        currentBtn.classList.add('active');
+
+        document.querySelectorAll('.chart-column').forEach(col => {
+            const valSpan = col.querySelector('.chart-bar-val');
+            const fillDiv = col.querySelector('.chart-fill');
+            valSpan.innerText = valSpan.getAttribute('data-val-' + viewMode);
+            fillDiv.style.height = fillDiv.getAttribute('data-perc-' + viewMode) + '%';
+        });
+    }
+
+    function filtrarTransacoesPorMes() {
+        const mesFiltro = document.getElementById('filter-month').value;
+        const rows = document.querySelectorAll('.list-item-row');
+        rows.forEach(row => {
+            const dateText = row.querySelector('.col-date').innerText.trim();
+            if (mesFiltro === 'all') {
+                row.style.display = 'flex';
+                return;
+            }
+            if (dateText === '-' || dateText === '') return;
+
+            let parts = dateText.replace(/-/g, '/').split('/');
+            if (parts.length >= 2) {
+                let m = (dateText.includes('-') && parts[0].length === 4) ? parts[1] : parts[1];
+                if (m === mesFiltro) {
+                    row.style.display = 'flex';
+                } else {
+                    row.style.display = 'none';
+                }
+            }
+        });
+    }
+
+    document.getElementById('search-financeiro').addEventListener('input', function (e) {
+        const term = e.target.value.toLowerCase();
+        const rows = document.querySelectorAll('.list-item-row');
+        rows.forEach(row => {
+            if (row.innerText.toLowerCase().includes(term)) {
+                row.style.display = 'flex';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
 </script>
 {% endblock %}

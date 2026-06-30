@@ -16,10 +16,63 @@ def require_login():
 @admin_bp.route('/')
 def dashboard():
     """Painel principal com resumo."""
+    from datetime import datetime
+    
+    hoje = datetime.now()
+    mes_atual = f"{hoje.year}-{hoje.month:02d}"
+    
+    entradas = list(db.financeiro.find({"tipo": "Entrada", "data": {"$regex": f"^{mes_atual}"}}))
+    saidas = list(db.financeiro.find({"tipo": "Saída", "data": {"$regex": f"^{mes_atual}"}}))
+    
+    saldo = 0.0
+    total_receitas = 0.0
+    total_despesas = 0.0
+    categorias_dict = {}
+    
+    for e in entradas:
+        val_str = str(e.get('valor', '0')).replace('R$', '').replace('.', '').replace(',', '.').strip()
+        try: 
+            v = float(val_str)
+            saldo += v
+            total_receitas += v
+            if v > 0:
+                cat = e.get('categoria', 'Receita')
+                categorias_dict[cat] = categorias_dict.get(cat, 0) + v
+        except: pass
+        
+    for s in saidas:
+        val_str = str(s.get('valor', '0')).replace('R$', '').replace('.', '').replace(',', '.').strip()
+        try: 
+            v = float(val_str)
+            saldo -= v
+            total_despesas += v
+            if v > 0:
+                cat = s.get('categoria', 'Despesa')
+                categorias_dict[cat] = categorias_dict.get(cat, 0) + v
+        except: pass
+        
+    total_geral = total_receitas + total_despesas
+    perc_receita = int((total_receitas / total_geral * 100)) if total_geral > 0 else 0
+    perc_despesa = int((total_despesas / total_geral * 100)) if total_geral > 0 else 0
+    
+    top_categorias = sorted(categorias_dict.items(), key=lambda x: x[1], reverse=True)[:3]
+    top_cat_nomes = [c[0] for c in top_categorias]
+    
+    dia_hoje = f"{hoje.year}-{hoje.month:02d}-{hoje.day:02d}"
+    agenda_hoje = list(db.agenda.find({"data": dia_hoje}).sort("hora", 1))
+    dias_semana = ["Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado", "Domingo"]
+    
     contagem = {
         "leads": db.leads.count_documents({"status": "Novo"}),
         "residentes": db.residentes.count_documents({}),
-        "funcionarios": db.funcionarios.count_documents({})
+        "funcionarios": db.funcionarios.count_documents({}),
+        "saldo_mes": f"R$ {saldo:,.2f}".replace(",", "X").replace(".", ",").replace("X", "."),
+        "perc_receita": perc_receita,
+        "perc_despesa": perc_despesa,
+        "top_categorias": top_cat_nomes,
+        "agenda_dia": hoje.day,
+        "agenda_dia_semana": dias_semana[hoje.weekday()],
+        "eventos_hoje": agenda_hoje
     }
     return render_template('admin/dashboard.html', resumo=contagem)
 
@@ -107,6 +160,8 @@ def financeiro():
     mes_atual_idx = agora.month - 1
     meses_nomes = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
     saldos_mes = {m: 0.0 for m in meses_nomes}
+    entradas_mes = {m: 0.0 for m in meses_nomes}
+    despesas_mes = {m: 0.0 for m in meses_nomes}
     
     for t in transacoes:
         v = tratar_moeda(t.get('valor', '0'))
@@ -126,8 +181,10 @@ def financeiro():
                     if 0 <= mes_idx <= 11:
                         if is_entrada:
                             saldos_mes[meses_nomes[mes_idx]] += v
+                            entradas_mes[meses_nomes[mes_idx]] += v
                         else:
                             saldos_mes[meses_nomes[mes_idx]] -= v
+                            despesas_mes[meses_nomes[mes_idx]] += v
                 except:
                     pass
             
@@ -139,17 +196,36 @@ def financeiro():
     }
     
     max_saldo = max([abs(val) for val in saldos_mes.values()] + [1.0])
+    max_entrada = max([val for val in entradas_mes.values()] + [1.0])
+    max_despesa = max([val for val in despesas_mes.values()] + [1.0])
     
     chart_data = []
     for i, m in enumerate(meses_nomes):
         val = saldos_mes[m]
-        perc = int((abs(val) / max_saldo) * 100)
-        if perc < 5 and val != 0: perc = 5
-        if perc == 0 and val == 0: perc = 10
+        val_e = entradas_mes[m]
+        val_d = despesas_mes[m]
+        
+        perc_saldo = int((abs(val) / max_saldo) * 100)
+        perc_entrada = int((val_e / max_entrada) * 100)
+        perc_despesa = int((val_d / max_despesa) * 100)
+        
+        if perc_saldo < 5 and val != 0: perc_saldo = 5
+        if perc_saldo == 0 and val == 0: perc_saldo = 10
+        
+        if perc_entrada < 5 and val_e != 0: perc_entrada = 5
+        if perc_entrada == 0 and val_e == 0: perc_entrada = 10
+        
+        if perc_despesa < 5 and val_d != 0: perc_despesa = 5
+        if perc_despesa == 0 and val_d == 0: perc_despesa = 10
+        
         chart_data.append({
             "mes": m,
             "valor": int(val),
-            "perc": perc,
+            "valor_e": int(val_e),
+            "valor_d": int(val_d),
+            "perc": perc_saldo,
+            "perc_entrada": perc_entrada,
+            "perc_despesa": perc_despesa,
             "is_current": (i == mes_atual_idx),
             "is_zero": (val == 0)
         })
@@ -158,7 +234,33 @@ def financeiro():
 
 @admin_bp.route('/agenda')
 def agenda():
-    return render_template('admin/agenda.html')
+    eventos = list(db.agenda.find().sort("data", 1))
+    return render_template('admin/agenda.html', eventos=eventos)
+
+@admin_bp.route('/api/agenda', methods=['POST'])
+def api_agenda():
+    try:
+        dados = request.get_json()
+        if not dados:
+            return jsonify({"status": "error", "message": "Nenhum dado recebido"}), 400
+            
+        evento_id = dados.get('id')
+        payload = {
+            "nome": dados.get('nome'),
+            "tipo": dados.get('tipo'),
+            "data": dados.get('data'),
+            "hora": dados.get('hora'),
+            "obs": dados.get('descricao')
+        }
+        
+        if evento_id and evento_id != 'null':
+            db.agenda.update_one({"_id": ObjectId(evento_id)}, {"$set": payload})
+        else:
+            db.agenda.insert_one(payload)
+        
+        return jsonify({"status": "success"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 @admin_bp.route('/exportar-excel')
 def exportar_excel():
@@ -176,10 +278,6 @@ def exportar_excel():
         
     output.seek(0)
     return send_file(output, download_name="relatorio_residentes.xlsx", as_attachment=True)
-
-@admin_bp.route('/configuracoes')
-def configuracoes():
-    return render_template('admin/configuracoes.html')
 
 @admin_bp.route('/api/residentes', methods=['POST'])
 def api_residentes():

@@ -24,7 +24,7 @@
     </button>
 </div>
 
-<button class="topbar-btn-fill">
+<button class="topbar-btn-fill" onclick="abrirDrawerEvento()">
     + Novo Evento
 </button>
 {% endblock %}
@@ -91,8 +91,8 @@
             </div>
             <div class="agenda-view-tabs">
                 <button class="view-tab active" id="tab-month" onclick="switchAgendaView('month')">Mês</button>
+                <button class="view-tab" id="tab-week" onclick="switchAgendaView('week')">Semanal</button>
                 <button class="view-tab" id="tab-day" onclick="switchAgendaView('day')">Dia</button>
-                <button class="view-tab">Lista</button>
             </div>
         </div>
     </div>
@@ -131,14 +131,18 @@
                     </div>
                     <div class="cal-cell"><span class="cal-date">3</span></div>
                     <div class="cal-cell"><span class="cal-date">4</span>
-                        <div class="cal-event bg-pale-green text-dark-green">Igreja Batista</div>
+                        <div class="cal-event bg-pale-green text-dark-green"
+                            onclick="abrirDrawerEvento(2, 'Igreja Batista', 'Evento', '2025-07-04', '14:00', '')"
+                            style="cursor:pointer;">Igreja Batista</div>
                     </div>
                     <div class="cal-cell"><span class="cal-date">5</span></div>
 
                     <!-- Week 2 -->
                     <div class="cal-cell"><span class="cal-date">6</span></div>
                     <div class="cal-cell"><span class="cal-date">7</span>
-                        <div class="cal-event bg-pale-blue text-dark-blue">Fam. Sra. Rosa</div>
+                        <div class="cal-event bg-pale-blue text-dark-blue"
+                            onclick="abrirDrawerEvento(3, 'Fam. Sra. Rosa', 'Visita Familiar', '2025-07-07', '15:00', '')"
+                            style="cursor:pointer;">Fam. Sra. Rosa</div>
                     </div>
                     <div class="cal-cell"><span class="cal-date">8</span></div>
                     <div class="cal-cell"><span class="cal-date">9</span>
@@ -300,6 +304,77 @@
                     </ul>
                 </div>
             </div>
+
+            <!-- wrapper-week-view -->
+            <div id="wrapper-week-view" style="display: none; width: 100%;">
+                <div class="calendar-nav-header" style="justify-content: center; gap: 20px;">
+                    <button class="cal-nav-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg></button>
+                    <h3 class="cal-month-title text-red"
+                        style="font-size: 1.1rem; min-width: 200px; text-align: center;">Semana: 03 a 09 de Julho</h3>
+                    <button class="cal-nav-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg></button>
+                </div>
+
+                <div class="weekly-grid"
+                    style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; margin-top: 20px;">
+                    <div class="week-col"
+                        style="background:#f9f9f9; padding:10px; border-radius:8px; min-height:400px;">
+                        <h4 style="text-align:center; font-size:0.9rem; color:#555; margin-bottom:15px;">Segunda
+                            <br><small>03</small>
+                        </h4>
+                        <div class="cal-event bg-pale-blue text-dark-blue" style="margin-bottom:8px;">10h - Visita</div>
+                    </div>
+                    <div class="week-col"
+                        style="background:#f9f9f9; border: 2px solid #7a1515; padding:10px; border-radius:8px; min-height:400px;">
+                        <h4
+                            style="text-align:center; font-size:0.9rem; color:#7a1515; margin-bottom:15px; font-weight:bold;">
+                            Terça <br><small>04</small></h4>
+                        <div class="cal-event bg-pale-blue text-dark-blue" style="margin-bottom:8px;">14h - Fam. Ana
+                        </div>
+                        <div class="cal-event bg-pale-yellow text-dark-yellow" style="margin-bottom:8px;">16h - Aniv.
+                            Elza</div>
+                    </div>
+                    <div class="week-col"
+                        style="background:#f9f9f9; padding:10px; border-radius:8px; min-height:400px;">
+                        <h4 style="text-align:center; font-size:0.9rem; color:#555; margin-bottom:15px;">Quarta
+                            <br><small>05</small>
+                        </h4>
+                    </div>
+                    <div class="week-col"
+                        style="background:#f9f9f9; padding:10px; border-radius:8px; min-height:400px;">
+                        <h4 style="text-align:center; font-size:0.9rem; color:#555; margin-bottom:15px;">Quinta
+                            <br><small>06</small>
+                        </h4>
+                        <div class="cal-event bg-pale-green text-dark-green" style="margin-bottom:8px;">10h - Coral
+                        </div>
+                    </div>
+                    <div class="week-col"
+                        style="background:#f9f9f9; padding:10px; border-radius:8px; min-height:400px;">
+                        <h4 style="text-align:center; font-size:0.9rem; color:#555; margin-bottom:15px;">Sexta
+                            <br><small>07</small>
+                        </h4>
+                        <div class="cal-event bg-pale-blue text-dark-blue" style="margin-bottom:8px;">15h30 - Carlos
+                        </div>
+                    </div>
+                    <div class="week-col"
+                        style="background:#f9f9f9; padding:10px; border-radius:8px; min-height:400px;">
+                        <h4 style="text-align:center; font-size:0.9rem; color:#555; margin-bottom:15px;">Sábado
+                            <br><small>08</small>
+                        </h4>
+                    </div>
+                    <div class="week-col"
+                        style="background:#f9f9f9; padding:10px; border-radius:8px; min-height:400px;">
+                        <h4 style="text-align:center; font-size:0.9rem; color:#555; margin-bottom:15px;">Domingo
+                            <br><small>09</small>
+                        </h4>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Right: Próximos Eventos -->
@@ -343,18 +418,146 @@
 </div>
 </div>
 
+<!-- Event Drawer -->
+<div class="detail-drawer" id="evento-drawer" style="display:none;">
+    <div class="drawer-header" style="display: flex; justify-content: space-between; padding: 30px 30px 10px 30px;">
+        <h2 style="color: var(--primary-color); margin: 0; font-size: 1.4rem;">Novo Evento</h2>
+        <button class="drawer-close" onclick="fecharDrawerEvento()"
+            style="background: none; border: none; cursor: pointer; color: var(--primary-color);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+    </div>
+
+    <div class="drawer-content-pane" style="padding: 20px 30px;">
+        <div class="form-group-outline mb-4">
+            <label class="text-primary-sm text-uppercase">NOME DO EVENTO / VISITA</label>
+            <input type="text" id="ag-nome" class="input-outline bg-gray-mock" placeholder="Ex: Família de Ana Lima"
+                required>
+        </div>
+
+        <div class="form-group-outline mb-4">
+            <label class="text-primary-sm text-uppercase">TIPO DE EVENTO</label>
+            <div class="custom-select-container">
+                <div class="custom-select-trigger" onclick="toggleAgendaCategoriaDrop()">
+                    <span id="ag-categoria-selected">Selecione o tipo</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 9l6 6 6-6"></path>
+                    </svg>
+                </div>
+                <div class="custom-select-options bg-gray-mock" id="ag-categoria-options" style="display: none;">
+                    <div class="custom-option" onclick="selectAgendaCategoria('Visita Familiar', '#548cfa')"><span
+                            class="dot" style="background:#548cfa;"></span> Visita Familiar</div>
+                    <div class="custom-option" onclick="selectAgendaCategoria('Evento', '#2ecc71')"><span class="dot"
+                            style="background:#2ecc71;"></span> Evento</div>
+                    <div class="custom-option" onclick="selectAgendaCategoria('Data Festiva', '#f1c40f')"><span
+                            class="dot" style="background:#f1c40f;"></span> Data Festiva</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row-outline mb-4">
+            <div class="form-group-outline">
+                <label class="text-primary-sm text-uppercase">DATA</label>
+                <input type="date" id="ag-data" class="input-outline bg-gray-mock" required>
+            </div>
+            <div class="form-group-outline">
+                <label class="text-primary-sm text-uppercase">HORA</label>
+                <input type="time" id="ag-hora" class="input-outline bg-gray-mock" required>
+            </div>
+        </div>
+
+        <div class="form-group-outline mb-4">
+            <label class="text-primary-sm text-uppercase">OBSERVAÇÃO / DETALHES</label>
+            <textarea id="ag-obs" class="textarea-outline bg-gray-mock" rows="4"
+                placeholder="Adicione uma observação..."></textarea>
+        </div>
+    </div>
+
+    <div class="drawer-action-buttons mt-auto">
+        <button class="drawer-btn-cancel" onclick="fecharDrawerEvento()">Cancelar</button>
+        <button class="drawer-btn-confirm" onclick="salvarDrawerEvento()">Confirmar</button>
+    </div>
+</div>
+
 <script>
+    let editingAgendaId = null;
+
+    function abrirDrawerEvento(id = null, nome = '', tipo = '', data = '', hora = '', obs = '') {
+        editingAgendaId = id;
+        if (id) {
+            document.querySelector('#evento-drawer .drawer-header h2').innerText = 'Editar Evento';
+            document.getElementById('ag-nome').value = nome !== 'None' ? nome : '';
+            document.getElementById('ag-data').value = data !== 'None' ? data : '';
+            document.getElementById('ag-hora').value = hora !== 'None' ? hora : '';
+            document.getElementById('ag-obs').value = obs !== 'None' ? obs : '';
+
+            let color = '#ccc';
+            if (tipo === 'Visita Familiar') color = '#548cfa';
+            else if (tipo === 'Evento') color = '#2ecc71';
+            else if (tipo === 'Data Festiva') color = '#f1c40f';
+            selectAgendaCategoria(tipo !== 'None' ? tipo : 'Selecione o tipo', color);
+        } else {
+            document.querySelector('#evento-drawer .drawer-header h2').innerText = 'Novo Evento';
+            document.getElementById('ag-nome').value = '';
+            document.getElementById('ag-data').value = '';
+            document.getElementById('ag-hora').value = '';
+            document.getElementById('ag-obs').value = '';
+            document.getElementById('ag-categoria-selected').innerHTML = 'Selecione o tipo';
+        }
+        document.getElementById('evento-drawer').style.display = 'flex';
+    }
+
+    function fecharDrawerEvento() {
+        document.getElementById('evento-drawer').style.display = 'none';
+        document.getElementById('ag-categoria-options').style.display = 'none';
+    }
+
+    function toggleAgendaCategoriaDrop() {
+        const options = document.getElementById('ag-categoria-options');
+        options.style.display = options.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function selectAgendaCategoria(text, color) {
+        document.getElementById('ag-categoria-selected').innerHTML = `<span class="dot" style="background:${color}; margin-right: 8px;"></span> ${text}`;
+        document.getElementById('ag-categoria-options').style.display = 'none';
+    }
+
+    function salvarDrawerEvento() {
+        const nome = document.getElementById('ag-nome').value;
+        const data = document.getElementById('ag-data').value;
+        let categoriaRaw = document.getElementById('ag-categoria-selected').innerText.trim();
+        if (categoriaRaw === 'Selecione o tipo') categoriaRaw = '';
+
+        if (!nome || !data || !categoriaRaw) {
+            alert("Preencha ao menos Nome, Data e Categoria!");
+            return;
+        }
+
+        // Simulação Front-end, o backend criaria @admin_bp.route('/api/agenda') //
+        alert("Agendamento de [" + nome + "] processado na interface!");
+        fecharDrawerEvento();
+    }
+
     function switchAgendaView(mode) {
         document.getElementById('tab-month').classList.remove('active');
+        document.getElementById('tab-week').classList.remove('active');
         document.getElementById('tab-day').classList.remove('active');
+
+        document.getElementById('wrapper-month-view').style.display = 'none';
+        document.getElementById('wrapper-week-view').style.display = 'none';
+        document.getElementById('wrapper-day-view').style.display = 'none';
 
         if (mode === 'month') {
             document.getElementById('tab-month').classList.add('active');
             document.getElementById('wrapper-month-view').style.display = 'block';
-            document.getElementById('wrapper-day-view').style.display = 'none';
+        } else if (mode === 'week') {
+            document.getElementById('tab-week').classList.add('active');
+            document.getElementById('wrapper-week-view').style.display = 'block';
         } else if (mode === 'day') {
             document.getElementById('tab-day').classList.add('active');
-            document.getElementById('wrapper-month-view').style.display = 'none';
             document.getElementById('wrapper-day-view').style.display = 'block';
         }
     }

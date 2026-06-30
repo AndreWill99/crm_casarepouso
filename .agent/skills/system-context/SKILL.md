@@ -94,3 +94,10 @@ Ao gerar código para este projeto, mantenha a simplicidade. Priorize o uso de P
 ## 11. Inteligência Financeira
 - **Cruzamento de Dados:** O sistema deve permitir filtrar despesas por funcionário e receitas por residente.
 - **Exportação:** O botão "Exportar" na tela financeira deve gerar o Excel consolidado com o saldo final calculado via Python (Pandas).
+
+
+
+## 12. Infraestrutura Híbrida
+- **Banco de Dados:** MongoDB Atlas (DBaaS) para sincronização entre site público e CRM local.
+- **Hospedagem:** Frontend/Leads na nuvem; Dashboard/Gestão em execução local ou híbrida via Web.
+- **Segurança:** Uso de variáveis de ambiente para esconder as credenciais do banco de dados no código.

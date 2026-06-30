@@ -10,12 +10,23 @@
             <h3 class="dash-card-title">Total de residentes</h3>
             <div class="dash-card-header-actions">
                 <span class="badge-mensal">Mensal</span>
+                <a href="{{ url_for('admin.residentes') }}" class="icon-expand"
+                    style="color:inherit; text-decoration:none;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 3 21 3 21 9"></polyline>
+                        <polyline points="9 21 3 21 3 15"></polyline>
+                        <line x1="21" y1="3" x2="14" y2="10"></line>
+                        <line x1="3" y1="21" x2="10" y2="14"></line>
+                    </svg>
+                </a>
             </div>
         </div>
         <div class="dash-card-value">
-            35 <span class="dash-card-diff">▲ 3</span>
+            {{ resumo.residentes }} <span class="dash-card-diff"></span>
         </div>
-        <button class="dash-card-action">Novo Residente</button>
+        <a href="{{ url_for('admin.residentes') }}" class="dash-card-action"
+            style="display:block; text-align:center; text-decoration:none;">Novo Residente</a>
     </div>
 
     <!-- Total de Leads Card -->
@@ -24,7 +35,7 @@
             <h3 class="dash-card-title">Total de Leads</h3>
             <div class="dash-card-header-actions">
                 <span class="badge-mensal">Mensal</span>
-                <span class="icon-expand">
+                <a href="{{ url_for('admin.leads') }}" class="icon-expand" style="color:inherit; text-decoration:none;">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
                         <polyline points="15 3 21 3 21 9"></polyline>
@@ -32,13 +43,14 @@
                         <line x1="21" y1="3" x2="14" y2="10"></line>
                         <line x1="3" y1="21" x2="10" y2="14"></line>
                     </svg>
-                </span>
+                </a>
             </div>
         </div>
         <div class="dash-card-value">
-            23 <span class="dash-card-diff">▲ 3</span>
+            {{ resumo.leads }} <span class="dash-card-diff">Novos</span>
         </div>
-        <button class="dash-card-action">Novo lead</button>
+        <a href="{{ url_for('admin.leads') }}" class="dash-card-action"
+            style="display:block; text-align:center; text-decoration:none;">Novo lead</a>
     </div>
 </div>
 
@@ -47,7 +59,8 @@
     <div class="dash-card" style="padding-bottom: 40px;">
         <div class="dash-card-header">
             <h3 class="dash-card-title">Saldo do mês</h3>
-            <span class="icon-expand">
+            <a href="{{ url_for('admin.financeiro') }}" class="icon-expand"
+                style="color:inherit; text-decoration:none;">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                     stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="15 3 21 3 21 9"></polyline>
@@ -55,10 +68,10 @@
                     <line x1="21" y1="3" x2="14" y2="10"></line>
                     <line x1="3" y1="21" x2="10" y2="14"></line>
                 </svg>
-            </span>
+            </a>
         </div>
         <div class="dash-card-value money">
-            R$ 12.000,00
+            {{ resumo.saldo_mes }}
         </div>
 
         <div class="balance-bars">
@@ -66,43 +79,56 @@
                 <span>receitas</span>
                 <span>Despesas</span>
             </div>
-            <div class="balance-bar-bg">
-                <div class="bar-receita"></div>
-                <div class="bar-despesa"></div>
+            <div class="balance-bar-bg" style="display:flex;">
+                <div class="bar-receita" style="width: {{ resumo.perc_receita }}%;"></div>
+                <div class="bar-despesa" style="width: {{ resumo.perc_despesa }}%;"></div>
             </div>
         </div>
 
         <div class="balance-categories">
+            {% for cat in resumo.top_categorias %}
             <div class="cat-item">
-                <div class="cat-bullet"></div> mensalidades
+                <div class="cat-bullet"
+                    style="background:{% if loop.index == 1 %}#cfc8bd{% elif loop.index == 2 %}#7a1515{% else %}#ccc{% endif %}">
+                </div> {{ cat }}
             </div>
-            <div class="cat-item">
-                <div class="cat-bullet"></div> Salarios
-            </div>
-            <div class="cat-item">
-                <div class="cat-bullet"></div> Internet
-            </div>
+            {% endfor %}
+            {% if not resumo.top_categorias %}
+            <div class="cat-item" style="color:#888;">Sem movimentações</div>
+            {% endif %}
         </div>
     </div>
 
     <!-- Agenda -->
     <div class="dash-card">
-        <h3 class="agenda-title">Quinta-feira</h3>
-        <div class="agenda-date">19</div>
+        <div class="dash-card-header" style="justify-content: space-between;">
+            <h3 class="agenda-title" style="margin:0;">{{ resumo.agenda_dia_semana }}</h3>
+            <a href="{{ url_for('admin.agenda') }}" class="icon-expand" style="color:inherit; text-decoration:none;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <polyline points="9 21 3 21 3 15"></polyline>
+                    <line x1="21" y1="3" x2="14" y2="10"></line>
+                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                </svg>
+            </a>
+        </div>
+        <div class="agenda-date">{{ resumo.agenda_dia }}</div>
 
         <ul class="agenda-list">
+            {% for e in resumo.eventos_hoje %}
             <li class="agenda-item">
-                <span class="time">15h</span>
-                <span class="event">visitas</span>
+                <span class="time">{{ e.hora }}</span>
+                <span class="event"
+                    style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px;">{{ e.nome
+                    }}</span>
             </li>
-            <li class="agenda-item">
-                <span class="time">17h</span>
-                <span class="event">visitas</span>
+            {% endfor %}
+            {% if not resumo.eventos_hoje %}
+            <li class="agenda-item" style="justify-content:center; color:#ccc;">
+                Sem eventos pra hoje
             </li>
-            <li class="agenda-item">
-                <span class="time">18h</span>
-                <span class="event">visitas</span>
-            </li>
+            {% endif %}
         </ul>
     </div>
 </div>
