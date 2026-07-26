@@ -24,7 +24,7 @@
             <nav class="desktop-menu">
                 <ul>
                     <li><a href="#sobre">Quem somos</a></li>
-                    <li><a href="#orcamento">Contato</a></li>
+                    <li><a href="#orcamento">Simular Mensalidade</a></li>
                 </ul>
             </nav>
 
@@ -89,7 +89,9 @@
         </div>
 
         <!-- Divisor Cinza -->
-        <div class="image-separator bg-gray"></div>
+        <div class="image-paronamica fade-in-slide">
+            <img src="{{ url_for('static', filename='img/IMG_abertacasa.jpg') }}" alt="espaço aberto">
+        </div>
 
         <!-- Sobre Nós -->
         <div class="about-wrapper">
@@ -99,13 +101,13 @@
                     preparada
                     para atender diferentes graus de dependência com uma equipe multidisciplinar.</p>
                 <div class="about-images">
-                    <div class="img-box bg-gray">
+                    <div class="img-box bg-gray fade-in-slide">
                         <img src="{{ url_for('static', filename='img/img_casa_corredor.jpeg') }}" alt="Corredor">
                     </div>
-                    <div class="img-box bg-gray">
+                    <div class="img-box bg-gray fade-in-slide">
                         <img src="{{ url_for('static', filename='img/img_casa_espaço.jpeg') }}" alt="Espaço">
                     </div>
-                    <div class="img-box bg-gray">
+                    <div class="img-box bg-gray fade-in-slide">
                         <img src="{{ url_for('static', filename='img/img_casa_fachada1.jpeg') }}" alt="Fachada">
                     </div>
                 </div>
@@ -120,21 +122,21 @@
 
         <!-- Graus -->
         <section class="graus-list">
-            <div class="grau-item bg-primary text-white">
+            <div class="grau-item bg-primary text-white fade-in-slide">
                 <div class="grau-content">
                     <h3>Grau 1</h3>
                     <p>Idosos independentes para atividades diárias (AVD), mas que podem necessitar de uso de
                         equipamentos de autoajuda ou supervisão.</p>
                 </div>
             </div>
-            <div class="grau-item bg-color-2 text-primary">
+            <div class="grau-item bg-color-2 text-primary fade-in-slide">
                 <div class="grau-content text-dark">
                     <h3 class="text-primary">Grau 2</h3>
                     <p>Idosos que necessitam de auxílio para algumas atividades de vida diária, como banho, higiene ou
                         locomoção, mas não apresentam alterações cognitivas graves.</p>
                 </div>
             </div>
-            <div class="grau-item bg-primary text-white">
+            <div class="grau-item bg-primary text-white fade-in-slide">
                 <div class="grau-content">
                     <h3>Grau 3</h3>
                     <p>Precisa de assistência total para todas as atividades diárias, com cuidados de enfermagem 24
@@ -222,6 +224,22 @@
             var menu = document.getElementById("mobileMenu");
             menu.classList.toggle("active");
         }
+
+        // Animacao Scroll Slide-In
+        document.addEventListener('DOMContentLoaded', () => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.15
+            });
+
+            document.querySelectorAll('.fade-in-slide').forEach(el => observer.observe(el));
+        });
     </script>
 </body>
 

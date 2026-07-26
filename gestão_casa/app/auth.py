@@ -1,7 +1,10 @@
+# pyrefly: ignore [missing-import]
 from flask import Blueprint, session, redirect, url_for, request, render_template
+# pyrefly: ignore [missing-import]
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from . import db, mail
+# pyrefly: ignore [missing-import]
 from flask_mail import Message
 import random
 import string

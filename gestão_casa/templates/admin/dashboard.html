@@ -88,9 +88,8 @@
         <div class="balance-categories">
             {% for cat in resumo.top_categorias %}
             <div class="cat-item">
-                <div class="cat-bullet"
-                    style="background:{% if loop.index == 1 %}#cfc8bd{% elif loop.index == 2 %}#7a1515{% else %}#ccc{% endif %}">
-                </div> {{ cat }}
+                <div class="cat-bullet"></div>
+                {{ cat }}
             </div>
             {% endfor %}
             {% if not resumo.top_categorias %}

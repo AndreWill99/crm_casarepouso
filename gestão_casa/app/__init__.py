@@ -1,6 +1,9 @@
 import os
+# pyrefly: ignore [missing-import]
 from flask import Flask
+# pyrefly: ignore [missing-import]
 from pymongo import MongoClient
+# pyrefly: ignore [missing-import]
 from flask_mail import Mail
 
 # Configuração do MongoDB
