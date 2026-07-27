@@ -6,10 +6,20 @@ from pymongo import MongoClient
 # pyrefly: ignore [missing-import]
 from flask_mail import Mail
 
-# Configuração do MongoDB
-MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017/")
-client = MongoClient(MONGO_URI)
+# Configuração do MongoDB (Tenta ler de MONGO_URI, se não existir usa a string do Atlas)
+MONGO_URI = os.getenv(
+    "MONGO_URI", 
+    "mongodb://localhost:27017/"
+)
+# Cria o cliente usando a API Server recomendada pela Atlas
+client = MongoClient(MONGO_URI, server_api=ServerApi('1'))
 db = client['gestao_casa_repouso']
+# Envia um ping para confirmar se a conexão com o banco remoto foi estabelecida com sucesso
+try:
+    client.admin.command('ping')
+    print("Pinged your deployment. You successfully connected to MongoDB!")
+except Exception as e:
+    print(f"Erro de conexão com o MongoDB: {e}")
 
 # Instância global do Mail
 mail = Mail()
