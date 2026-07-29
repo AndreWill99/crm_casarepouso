@@ -3,6 +3,7 @@ import os
 from flask import Flask
 # pyrefly: ignore [missing-import]
 from pymongo import MongoClient
+from pymongo.server_api import ServerApi
 # pyrefly: ignore [missing-import]
 from flask_mail import Mail
 
